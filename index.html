@@ -9,19 +9,22 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        matte: '#18181B',
                         deep: '#121215',
+                        matte: '#18181B',
                         silver: '#A1A1AA',
+                        accent: '#E07B39',
+                        sig: 'rgb(211,84,0)'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -35,27 +38,26 @@
         body {
             background-color: #121215;
             color: #FFFFFF;
+            overflow-x: hidden;
         }
-        /* Custom scrollbar for a premium feel */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #121215;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #A1A1AA;
-        }
+        
+        /* Custom Matte Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #121215; }
+        ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 4px; border: 1px solid #18181B; }
+        ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
+
+        /* Glassmorphism Header */
         .glass-nav {
-            background: rgba(18, 18, 21, 0.8);
+            background: rgba(18, 18, 21, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        /* Scrollytelling Utility Classes */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
@@ -63,102 +65,177 @@
     <nav class="fixed w-full top-0 z-50 glass-nav">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3 group">
-                <svg class="w-8 h-8 transform group-hover:rotate-90 transition duration-500 ease-in-out" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg id="nav-logo" class="w-8 h-8 transition-transform duration-500 group-hover:rotate-90" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="500" height="500" rx="100" fill="#18181B"/>
                     <g stroke-width="16" stroke-linecap="square">
                         <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/>
                         <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/>
                     </g>
                 </svg>
-                <span class="font-bold text-lg tracking-tight">CyberSlayer<span class="text-silver">Corpz</span></span>
+                <span class="font-bold text-lg tracking-tight text-white">CyberSlayer<span class="text-silver">Corpz</span></span>
             </a>
 
             <div class="hidden md:flex items-center gap-8">
                 <a href="#projects" class="text-sm font-medium text-silver hover:text-white transition">Projects</a>
-                <a href="#tech" class="text-sm font-medium text-silver hover:text-white transition">Tech Stack</a>
-                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="flex items-center gap-2 text-sm font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-gray-200 transition shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                <a href="#capabilities" class="text-sm font-medium text-silver hover:text-white transition">Tech Stack</a>
+                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="anim-btn flex items-center gap-2 text-sm font-medium bg-white text-black px-5 py-2.5 rounded-full hover:bg-gray-200 transition shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                     <i class="fa-brands fa-instagram"></i> Instagram
                 </a>
             </div>
             
-            <div class="md:hidden text-silver text-xl">
-                <a href="https://instagram.com/cyberslayercorpz" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <div class="md:hidden">
+                <button class="text-silver hover:text-white text-2xl focus:outline-none"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
     </nav>
 
-    <header class="pt-40 pb-20 px-6 max-w-6xl mx-auto flex flex-col items-start justify-center flex-grow">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-matte text-xs font-semibold tracking-widest text-silver mb-6">
-            <span class="text-yellow-400">⚡</span> INDIE SOFTWARE STUDIO
-        </div>
-        
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6">
-            We build modern,<br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-silver">high-impact software.</span>
-        </h1>
-        
-        <p class="text-lg md:text-xl text-silver max-w-2xl font-light leading-relaxed mb-10">
-            From web platforms to next-gen utilities, we create fast, scalable, and accessible digital experiences designed to empower users and communities.
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a href="#projects" class="inline-flex justify-center items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-gray-200 transition">
-                View Flagship Project <i class="fa-solid fa-arrow-down text-sm"></i>
-            </a>
-            <a href="https://github.com/tanzeemrockz" target="_blank" class="inline-flex justify-center items-center gap-2 border border-zinc-800 bg-matte text-white font-semibold px-8 py-4 rounded-xl hover:border-zinc-600 transition">
-                <i class="fa-brands fa-github text-lg"></i> GitHub Profile
-            </a>
-        </div>
-    </header>
-
-    <section id="projects" class="py-24 px-6 bg-matte border-t border-zinc-800/50">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold mb-12">Featured Builds</h2>
+    <section id="hero-track" class="md:h-[200vh] relative w-full">
+        <div class="md:sticky top-0 h-screen flex flex-col justify-center px-6 overflow-hidden relative">
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div id="hero-hex" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 opacity-10 pointer-events-none w-32 h-32 hidden md:block">
+                <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                    <g stroke-width="8" stroke-linecap="square">
+                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#E07B39"/>
+                        <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="4"/>
+                    </g>
+                </svg>
+            </div>
+
+            <div id="hero-content" class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-start pt-20 md:pt-0">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-matte text-xs font-semibold tracking-widest text-silver mb-8 shadow-lg">
+                    <span class="text-yellow-400 animate-pulse"><i class="fa-solid fa-bolt"></i></span> INDIE SOFTWARE STUDIO
+                </div>
                 
-                <div class="group bg-deep border border-zinc-800 rounded-3xl p-8 hover:-translate-y-2 hover:border-zinc-600 transition duration-300">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="w-14 h-14 bg-[#E07B39] rounded-2xl flex items-center justify-center shadow-lg">
-                            <svg class="w-8 h-8" viewBox="0 0 100 100">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight mb-6 max-w-4xl">
+                    We build modern,<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">high-impact software.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-silver max-w-2xl font-medium leading-relaxed mb-10">
+                    From web platforms to next-gen utilities, we create fast, scalable, and accessible digital experiences designed to empower users and communities.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <a href="#projects" class="anim-btn inline-flex justify-center items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-gray-200 transition">
+                        View Flagship Project <i class="fa-solid fa-arrow-down text-sm"></i>
+                    </a>
+                    <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn inline-flex justify-center items-center gap-2 border border-zinc-800 bg-matte text-white font-semibold px-8 py-4 rounded-xl hover:border-zinc-700 transition">
+                        <i class="fa-brands fa-github text-lg"></i> GitHub Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="capabilities" class="relative w-full max-w-6xl mx-auto px-6 py-24 md:py-0">
+        <div class="flex flex-col md:flex-row md:gap-24 relative">
+            
+            <div class="md:w-5/12 md:sticky top-0 md:h-screen flex flex-col justify-center py-12 md:py-0 z-10">
+                <h2 class="text-3xl md:text-5xl font-black mb-6">Core Stack &<br>Capabilities</h2>
+                <p class="text-silver mb-8 text-lg font-medium leading-relaxed">We build robust software and fluid interfaces using modern, battle-tested technologies.</p>
+                
+                <div class="p-8 border border-zinc-800 bg-matte/80 backdrop-blur-md rounded-3xl shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-zinc-800 via-accent to-zinc-800"></div>
+                    <p class="text-[10px] text-zinc-500 mb-3 uppercase tracking-[0.2em] font-bold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span> Active Module Target
+                    </p>
+                    <p id="hud-text" class="text-2xl font-bold text-white transition-colors duration-300">Awaiting Target...</p>
+                </div>
+            </div>
+
+            <div class="md:w-7/12 md:py-[40vh] flex flex-col gap-8 md:gap-32 pb-24 z-0">
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Web & Mobile Apps">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-mobile-screen-button text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Web & Mobile Apps</h3><p class="text-sm text-zinc-500">Cross-platform digital experiences.</p></div>
+                </div>
+                
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Framer Motion & Anime.js">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Fluid UI Animations</h3><p class="text-sm text-zinc-500">Framer Motion & Anime.js engineering.</p></div>
+                </div>
+                
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Supabase / PostgreSQL">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-database text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Supabase / PostgreSQL</h3><p class="text-sm text-zinc-500">Robust, real-time backend architecture.</p></div>
+                </div>
+                
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Modern UI / Tailwind CSS">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-css3-alt text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Modern UI Design</h3><p class="text-sm text-zinc-500">Engineered with Tailwind CSS tokens.</p></div>
+                </div>
+                
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="JavaScript (ES6+)">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-js text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">JavaScript (ES6+)</h3><p class="text-sm text-zinc-500">Advanced logic and interactive DOM.</p></div>
+                </div>
+                
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Git & Version Control">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-git-alt text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Version Control</h3><p class="text-sm text-zinc-500">CI/CD pipelines & team integration.</p></div>
+                </div>
+                
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Cloud Deployment">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-cloud-arrow-up text-2xl text-silver"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Cloud Infrastructure</h3><p class="text-sm text-zinc-500">Vercel & serverless edge computing.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="md:h-[300vh] relative w-full border-t border-zinc-800/50 bg-matte md:bg-transparent">
+        <div class="md:sticky top-0 h-auto md:h-screen flex flex-col justify-center overflow-hidden py-24 md:py-0">
+            
+            <div class="max-w-6xl mx-auto px-6 w-full mb-12 shrink-0 relative z-20">
+                <h2 class="text-3xl md:text-5xl font-black">Featured Builds</h2>
+            </div>
+            
+            <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[200vw] transition-transform duration-75 ease-linear will-change-transform">
+                
+                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-accent transition duration-300">
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
+                            <svg viewBox="0 0 100 100" fill="none" class="w-12 h-12">
+                                <rect width="100" height="100" rx="25" fill="#E07B39"/>
                                 <path d="M30 65l15-15m10-10l15-15m-20 35l15 15m-30-20l15-15" stroke="white" stroke-width="12" stroke-linecap="round"/>
                             </svg>
                         </div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-500 bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800">PWA / Web App</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-accent bg-[#2A1A12] px-4 py-2 rounded-full border border-accent/20">PWA / Web App</span>
                     </div>
                     
-                    <h3 class="text-2xl font-bold mb-3">ShareShed</h3>
-                    <p class="text-silver text-sm leading-relaxed mb-6">
+                    <h3 class="text-3xl font-black mb-4 text-white">ShareShed</h3>
+                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
                         A peer-to-peer neighborhood tool-sharing platform. Borrow drills, ladders, and equipment locally with built-in deposit safety and real-time chat.
                     </p>
                     
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span class="text-xs font-medium text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">Tailwind CSS</span>
-                        <span class="text-xs font-medium text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">Supabase</span>
-                        <span class="text-xs font-medium text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">JavaScript</span>
-                        <span class="text-xs font-medium text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800">Vercel</span>
+                    <div class="flex flex-wrap gap-3 mb-12">
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Supabase</span>
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">JavaScript</span>
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Vercel</span>
                     </div>
                     
-                    <div class="flex flex-wrap items-center gap-3 mt-auto">
-                        <a href="https://shareshed-bice.vercel.app" target="_blank" class="bg-white text-black text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-gray-200 transition">
-                            Launch App <i class="fa-solid fa-arrow-right ml-1"></i>
+                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
+                        <a href="https://shareshed-bice.vercel.app" target="_blank" class="anim-btn bg-white text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-gray-200 transition">
+                            Launch App <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
                         </a>
-                        <a href="https://instagram.com/shareshedapp" target="_blank" class="text-silver text-sm font-medium px-5 py-2.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-600 transition">
+                        <a href="https://instagram.com/shareshedapp" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
                             <i class="fa-brands fa-instagram"></i> @shareshedapp
                         </a>
                     </div>
                 </div>
 
-                <div class="bg-deep border border-zinc-800 border-dashed rounded-3xl p-8 flex flex-col justify-center relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-zinc-900/50 to-transparent opacity-50"></div>
-                    <div class="relative z-10">
-                        <span class="inline-block text-xs font-bold uppercase tracking-wider text-zinc-500 bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 mb-6">In The Lab</span>
-                        <h3 class="text-2xl font-bold mb-3 text-zinc-400">Next Build in Progress...</h3>
-                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border-2 border-zinc-800 border-dashed rounded-3xl p-8 lg:p-12 flex flex-col justify-center relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-zinc-900/30 to-transparent"></div>
+                    <div class="relative z-10 max-w-xl">
+                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-zinc-400 bg-matte px-4 py-2 rounded-full border border-zinc-800 mb-8">
+                            <i class="fa-solid fa-flask text-silver mr-2"></i> In The Lab
+                        </span>
+                        <h3 class="text-3xl font-black mb-4 text-zinc-300">Next Build in Progress...</h3>
+                        <p class="text-zinc-500 text-base leading-relaxed mb-10">
                             Currently architecting our next major project. Whether it's a new mobile app, desktop utility, or a game—stay tuned on our Instagram for development updates.
                         </p>
-                        <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="inline-flex items-center gap-2 text-silver text-sm font-bold hover:text-white transition">
-                            Follow for updates <i class="fa-solid fa-arrow-right"></i>
+                        <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="anim-btn inline-flex items-center gap-2 text-white bg-matte border border-zinc-700 text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-zinc-800 transition shadow-lg">
+                            <i class="fa-brands fa-instagram"></i> Follow for updates
                         </a>
                     </div>
                 </div>
@@ -167,63 +244,158 @@
         </div>
     </section>
 
-    <section id="tech" class="py-24 px-6 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-4">Core Stack & Capabilities</h2>
-        <p class="text-silver mb-10 max-w-xl">We build robust software using modern, battle-tested technologies designed for speed, scale, and reliability across platforms.</p>
-        
-        <div class="flex flex-wrap gap-4">
-            <div class="flex items-center gap-3 px-6 py-4 rounded-2xl border border-zinc-800 bg-matte text-zinc-300 hover:border-zinc-600 transition">
-                <i class="fa-solid fa-mobile-screen-button text-xl"></i>
-                <span class="font-medium">Web & Mobile Apps</span>
-            </div>
-            <div class="flex items-center gap-3 px-6 py-4 rounded-2xl border border-zinc-800 bg-matte text-zinc-300 hover:border-zinc-600 transition">
-                <i class="fa-solid fa-database text-xl"></i>
-                <span class="font-medium">Supabase / PostgreSQL</span>
-            </div>
-            <div class="flex items-center gap-3 px-6 py-4 rounded-2xl border border-zinc-800 bg-matte text-zinc-300 hover:border-zinc-600 transition">
-                <i class="fa-brands fa-css3-alt text-xl"></i>
-                <span class="font-medium">Modern UI / Tailwind CSS</span>
-            </div>
-            <div class="flex items-center gap-3 px-6 py-4 rounded-2xl border border-zinc-800 bg-matte text-zinc-300 hover:border-zinc-600 transition">
-                <i class="fa-brands fa-js text-xl"></i>
-                <span class="font-medium">JavaScript (ES6+)</span>
-            </div>
-            <div class="flex items-center gap-3 px-6 py-4 rounded-2xl border border-zinc-800 bg-matte text-zinc-300 hover:border-zinc-600 transition">
-                <i class="fa-brands fa-git-alt text-xl"></i>
-                <span class="font-medium">Git & Version Control</span>
-            </div>
-            <div class="flex items-center gap-3 px-6 py-4 rounded-2xl border border-zinc-800 bg-matte text-zinc-300 hover:border-zinc-600 transition">
-                <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
-                <span class="font-medium">Cloud Deployment</span>
-            </div>
-        </div>
-    </section>
-
-    <footer class="mt-auto border-t border-zinc-800/50 bg-matte py-12 px-6">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <footer class="mt-auto bg-deep py-20 px-6 border-t border-zinc-800/80 relative z-20">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
             
-            <div class="flex flex-col items-center md:items-start">
-                <div class="flex items-center gap-2 mb-2">
-                    <svg class="w-5 h-5" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g stroke-width="16" stroke-linecap="square">
                             <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/>
                             <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/>
                         </g>
                     </svg>
-                    <span class="font-bold text-sm">CyberSlayerCorpz</span>
+                    <span class="font-bold text-xl tracking-tight text-white">CyberSlayer<span class="text-silver">Corpz</span></span>
                 </div>
-                <p class="text-xs text-zinc-500">Designed & built by <a href="https://github.com/tanzeemrockz" class="text-silver hover:text-white transition">tanzeemrockz</a></p>
+                <p class="text-sm text-zinc-500 mb-2">© 2026 CyberSlayerCorpz. All rights reserved.</p>
+                <p class="text-sm text-zinc-500">
+                    Made with ❤️ by <span class="text-sig font-bold">tanzeemrockz</span> | 
+                    Operator: <a href="https://tanzeemrockz.github.io" target="_blank" class="text-white hover:text-sig underline underline-offset-2 transition">CyberSlayerCorpz</a>
+                </p>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-6 text-sm text-zinc-500">
-                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="hover:text-white transition">@cyberslayercorpz</a>
-                <a href="https://instagram.com/shareshedapp" target="_blank" class="hover:text-white transition">@shareshedapp</a>
-                <a href="https://github.com/tanzeemrockz" target="_blank" class="hover:text-white transition">GitHub</a>
-                <a href="mailto:cyberslayercorpz@gmail.com" class="hover:text-white transition">Contact Support</a>
+            <div class="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm font-semibold text-zinc-400">
+                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-instagram"></i> @cyberslayercorpz</a>
+                <a href="https://instagram.com/shareshedapp" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-instagram"></i> @shareshedapp</a>
+                <a href="https://github.com/tanzeemrockz" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-github"></i> GitHub</a>
+                <a href="mailto:cyberslayercorpz@gmail.com" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-envelope"></i> Contact Support</a>
             </div>
             
         </div>
     </footer>
 
+    <script>
+        // Physics Engine & DOM Elements
+        const heroTrack = document.getElementById('hero-track');
+        const heroContent = document.getElementById('hero-content');
+        const heroHex = document.getElementById('hero-hex');
+        const projTrack = document.getElementById('projects');
+        const projSlider = document.getElementById('proj-slider');
+
+        // Scrollytelling rAF Loop
+        function onScrollEngine() {
+            const isDesktop = window.innerWidth >= 768;
+            
+            // Bypass pinning scrub on mobile devices
+            if (!isDesktop) {
+                heroContent.style.opacity = 1;
+                heroContent.style.transform = 'none';
+                projSlider.style.transform = 'none';
+                return;
+            }
+
+            // 1. Hero Section Matrix Scrub
+            const heroRect = heroTrack.getBoundingClientRect();
+            // Calculate progress (0 at top, 1 at bottom of track)
+            let hProgress = -heroRect.top / (heroRect.height - window.innerHeight);
+            hProgress = Math.max(0, Math.min(1, hProgress));
+            
+            // Apply Transforms
+            heroContent.style.opacity = Math.max(0, 1 - (hProgress * 1.5)); // Fades out completely by ~66% scroll
+            heroContent.style.transform = `scale(${1 - (hProgress * 0.15)}) translateY(${hProgress * 100}px)`;
+            
+            // Hexagon Background Matrix
+            if (hProgress > 0) {
+                heroHex.style.opacity = Math.min(0.8, hProgress * 2);
+                heroHex.style.transform = `translate(-50%, -50%) scale(${1 + (hProgress * 30)}) rotate(${hProgress * 180}deg)`;
+            }
+
+            // 2. Project Horizontal Matrix Scrub
+            const projRect = projTrack.getBoundingClientRect();
+            let pProgress = -projRect.top / (projRect.height - window.innerHeight);
+            pProgress = Math.max(0, Math.min(1, pProgress));
+            
+            // Calculate dynamic maximum scroll distance based on actual slider width vs screen width
+            const maxScroll = projSlider.scrollWidth - window.innerWidth + 48; 
+            if (maxScroll > 0) {
+                projSlider.style.transform = `translate3d(${-pProgress * maxScroll}px, 0, 0)`;
+            }
+        }
+
+        // Bind requestAnimationFrame to scroll
+        window.addEventListener('scroll', () => {
+            requestAnimationFrame(onScrollEngine);
+        });
+
+        // Trigger initial frame
+        requestAnimationFrame(onScrollEngine);
+
+
+        // 3. Capabilities HUD Intersection Observer (For both Desktop & Mobile)
+        const hudText = document.getElementById('hud-text');
+        const observerOptions = {
+            root: null,
+            rootMargin: '-50% 0px -50% 0px', // Trigger precisely at the vertical center of the screen
+            threshold: 0
+        };
+
+        const capObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const moduleName = entry.target.getAttribute('data-module');
+                    
+                    // Update text immediately
+                    hudText.innerText = moduleName;
+                    
+                    // Anime.js HUD Text Ping
+                    anime({
+                        targets: hudText,
+                        opacity: [0.3, 1],
+                        color: ['#A1A1AA', '#E07B39', '#FFFFFF'], // Silver -> Orange -> White
+                        duration: 600,
+                        easing: 'easeOutCubic'
+                    });
+
+                    // Transform Active Pill
+                    anime({
+                        targets: entry.target,
+                        borderColor: '#E07B39', // Accent glow
+                        translateX: window.innerWidth >= 768 ? 32 : 0, // Slide right on desktop only
+                        scale: 1.02,
+                        duration: 400,
+                        easing: 'easeOutQuint'
+                    });
+                } else {
+                    // Revert Inactive Pill
+                    anime({
+                        targets: entry.target,
+                        borderColor: '#27272A', // Zinc-800
+                        translateX: 0,
+                        scale: 1,
+                        duration: 400,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Bind observer to pills
+        document.querySelectorAll('.cap-pill').forEach(pill => capObserver.observe(pill));
+
+
+        // 4. Button Tactile Micro-Interactions (Anime.js)
+        document.querySelectorAll('.anim-btn').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                anime({ targets: btn, scale: 0.95, duration: 150, easing: 'easeOutQuad' });
+            });
+            btn.addEventListener('mouseup', () => {
+                anime({ targets: btn, scale: 1, duration: 400, easing: 'easeOutElastic(1, .6)' });
+            });
+            btn.addEventListener('mouseleave', () => {
+                anime({ targets: btn, scale: 1, duration: 300, easing: 'easeOutQuad' });
+            });
+        });
+
+    </script>
 </body>
 </html>
