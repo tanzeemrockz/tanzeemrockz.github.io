@@ -9,7 +9,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,11 +23,14 @@
                         deep: '#121215',
                         matte: '#18181B',
                         silver: '#A1A1AA',
+                        cyan: '#00F0FF',
+                        pink: '#FF007F',
                         accent: '#E07B39',
                         sig: 'rgb(211,84,0)'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
                     }
                 }
             }
@@ -60,7 +63,7 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="antialiased flex flex-col min-h-screen">
+<body class="antialiased flex flex-col min-h-screen selection:bg-cyan selection:text-black">
 
     <nav class="fixed w-full top-0 z-50 glass-nav">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -95,7 +98,7 @@
             <div id="hero-hex" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 opacity-10 pointer-events-none w-32 h-32 hidden md:block">
                 <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
                     <g stroke-width="8" stroke-linecap="square">
-                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#E07B39"/>
+                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#00F0FF"/>
                         <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="4"/>
                     </g>
                 </svg>
@@ -103,12 +106,12 @@
 
             <div id="hero-content" class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-start pt-20 md:pt-0">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-matte text-xs font-semibold tracking-widest text-silver mb-8 shadow-lg">
-                    <span class="text-yellow-400 animate-pulse"><i class="fa-solid fa-bolt"></i></span> INDIE SOFTWARE STUDIO
+                    <span class="text-cyan animate-pulse"><i class="fa-solid fa-bolt"></i></span> INDIE SOFTWARE STUDIO
                 </div>
                 
                 <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight mb-6 max-w-4xl">
                     We build modern,<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">high-impact software.</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-pink to-accent">high-impact software.</span>
                 </h1>
                 
                 <p class="text-lg md:text-xl text-silver max-w-2xl font-medium leading-relaxed mb-10">
@@ -117,7 +120,7 @@
                 
                 <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                     <a href="#projects" class="anim-btn inline-flex justify-center items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-gray-200 transition">
-                        View Flagship Project <i class="fa-solid fa-arrow-down text-sm"></i>
+                        View Flagship Builds <i class="fa-solid fa-arrow-down text-sm"></i>
                     </a>
                     <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn inline-flex justify-center items-center gap-2 border border-zinc-800 bg-matte text-white font-semibold px-8 py-4 rounded-xl hover:border-zinc-700 transition">
                         <i class="fa-brands fa-github text-lg"></i> GitHub Profile
@@ -135,22 +138,27 @@
                 <p class="text-silver mb-8 text-lg font-medium leading-relaxed">We build robust software and fluid interfaces using modern, battle-tested technologies.</p>
                 
                 <div class="p-8 border border-zinc-800 bg-matte/80 backdrop-blur-md rounded-3xl shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-zinc-800 via-accent to-zinc-800"></div>
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan via-pink to-accent"></div>
                     <p class="text-[10px] text-zinc-500 mb-3 uppercase tracking-[0.2em] font-bold flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span> Active Module Target
+                        <span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span> Active Module Target
                     </p>
                     <p id="hud-text" class="text-2xl font-bold text-white transition-colors duration-300">Awaiting Target...</p>
                 </div>
             </div>
 
             <div class="md:w-7/12 md:py-[40vh] flex flex-col gap-8 md:gap-32 pb-24 z-0">
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Web & Mobile Apps">
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="HTML5 Canvas 2D & Web Audio">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-gamepad text-2xl text-cyan"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">Canvas & Audio Synthesizers</h3><p class="text-sm text-zinc-500">Pure 2D/3D projection engines and audio nodes.</p></div>
+                </div>
+
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Web & Mobile PWAs">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-mobile-screen-button text-2xl text-silver"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Web & Mobile Apps</h3><p class="text-sm text-zinc-500">Cross-platform digital experiences.</p></div>
                 </div>
                 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Framer Motion & Anime.js">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-2xl text-silver"></i></div>
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Anime.js & Framer Motion">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-2xl text-pink"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Fluid UI Animations</h3><p class="text-sm text-zinc-500">Framer Motion & Anime.js engineering.</p></div>
                 </div>
                 
@@ -164,19 +172,9 @@
                     <div><h3 class="font-bold text-xl mb-1">Modern UI Design</h3><p class="text-sm text-zinc-500">Engineered with Tailwind CSS tokens.</p></div>
                 </div>
                 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="JavaScript (ES6+)">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-js text-2xl text-silver"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">JavaScript (ES6+)</h3><p class="text-sm text-zinc-500">Advanced logic and interactive DOM.</p></div>
-                </div>
-                
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Git & Version Control">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-git-alt text-2xl text-silver"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Version Control</h3><p class="text-sm text-zinc-500">CI/CD pipelines & team integration.</p></div>
-                </div>
-                
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Cloud Deployment">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-cloud-arrow-up text-2xl text-silver"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Cloud Infrastructure</h3><p class="text-sm text-zinc-500">Vercel & serverless edge computing.</p></div>
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="JavaScript (ES6+) Engine">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-js text-2xl text-accent"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">JavaScript (ES6+)</h3><p class="text-sm text-zinc-500">Advanced logic and interactive DOM engines.</p></div>
                 </div>
             </div>
         </div>
@@ -189,8 +187,40 @@
                 <h2 class="text-3xl md:text-5xl font-black">Featured Builds</h2>
             </div>
             
-            <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[200vw] transition-transform duration-75 ease-linear will-change-transform">
+            <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[250vw] transition-transform duration-75 ease-linear will-change-transform">
                 
+                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
+                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan/10 rounded-full blur-3xl group-hover:bg-cyan/20 transition-all"></div>
+                    
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
+                            <i class="fa-solid fa-flag-checkered text-2xl text-cyan"></i>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">HTML5 / Web Audio</span>
+                    </div>
+                    
+                    <h3 class="text-3xl font-black mb-4 text-white italic">CYBERDRIVE</h3>
+                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
+                        A next-gen 80s synthwave pseudo-3D arcade racer built entirely with pure HTML5 Canvas math and Web Audio synthesis. Features procedural track curves, dynamic traffic AI, and nitro heat management.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-3 mb-12">
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Canvas 2D</span>
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Web Audio API</span>
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
+                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Anime.js</span>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
+                        <a href="https://cyberdrive.vercel.app" target="_blank" class="anim-btn bg-cyan text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                            Launch Game 🏎️ <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
+                        </a>
+                        <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
+                            <i class="fa-brands fa-github"></i> Source Code
+                        </a>
+                    </div>
+                </div>
+
                 <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-accent transition duration-300">
                     <div class="flex items-center justify-between mb-8">
                         <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
@@ -216,7 +246,7 @@
                     
                     <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
                         <a href="https://shareshed-bice.vercel.app" target="_blank" class="anim-btn bg-white text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-gray-200 transition">
-                            Launch App <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
+                            Launch App 🛠️ <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
                         </a>
                         <a href="https://instagram.com/shareshedapp" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
                             <i class="fa-brands fa-instagram"></i> @shareshedapp
@@ -232,7 +262,7 @@
                         </span>
                         <h3 class="text-3xl font-black mb-4 text-zinc-300">Next Build in Progress...</h3>
                         <p class="text-zinc-500 text-base leading-relaxed mb-10">
-                            Currently architecting our next major project. Whether it's a new mobile app, desktop utility, or a game—stay tuned on our Instagram for development updates.
+                            Currently architecting our next major project. Stay tuned on our Instagram for development updates and early beta testing.
                         </p>
                         <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="anim-btn inline-flex items-center gap-2 text-white bg-matte border border-zinc-700 text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-zinc-800 transition shadow-lg">
                             <i class="fa-brands fa-instagram"></i> Follow for updates
@@ -296,15 +326,12 @@
 
             // 1. Hero Section Matrix Scrub
             const heroRect = heroTrack.getBoundingClientRect();
-            // Calculate progress (0 at top, 1 at bottom of track)
             let hProgress = -heroRect.top / (heroRect.height - window.innerHeight);
             hProgress = Math.max(0, Math.min(1, hProgress));
             
-            // Apply Transforms
-            heroContent.style.opacity = Math.max(0, 1 - (hProgress * 1.5)); // Fades out completely by ~66% scroll
+            heroContent.style.opacity = Math.max(0, 1 - (hProgress * 1.5));
             heroContent.style.transform = `scale(${1 - (hProgress * 0.15)}) translateY(${hProgress * 100}px)`;
             
-            // Hexagon Background Matrix
             if (hProgress > 0) {
                 heroHex.style.opacity = Math.min(0.8, hProgress * 2);
                 heroHex.style.transform = `translate(-50%, -50%) scale(${1 + (hProgress * 30)}) rotate(${hProgress * 180}deg)`;
@@ -315,27 +342,23 @@
             let pProgress = -projRect.top / (projRect.height - window.innerHeight);
             pProgress = Math.max(0, Math.min(1, pProgress));
             
-            // Calculate dynamic maximum scroll distance based on actual slider width vs screen width
             const maxScroll = projSlider.scrollWidth - window.innerWidth + 48; 
             if (maxScroll > 0) {
                 projSlider.style.transform = `translate3d(${-pProgress * maxScroll}px, 0, 0)`;
             }
         }
 
-        // Bind requestAnimationFrame to scroll
         window.addEventListener('scroll', () => {
             requestAnimationFrame(onScrollEngine);
         });
 
-        // Trigger initial frame
         requestAnimationFrame(onScrollEngine);
 
-
-        // 3. Capabilities HUD Intersection Observer (For both Desktop & Mobile)
+        // 3. Capabilities HUD Intersection Observer
         const hudText = document.getElementById('hud-text');
         const observerOptions = {
             root: null,
-            rootMargin: '-50% 0px -50% 0px', // Trigger precisely at the vertical center of the screen
+            rootMargin: '-50% 0px -50% 0px',
             threshold: 0
         };
 
@@ -344,32 +367,28 @@
                 if (entry.isIntersecting) {
                     const moduleName = entry.target.getAttribute('data-module');
                     
-                    // Update text immediately
                     hudText.innerText = moduleName;
                     
-                    // Anime.js HUD Text Ping
                     anime({
                         targets: hudText,
                         opacity: [0.3, 1],
-                        color: ['#A1A1AA', '#E07B39', '#FFFFFF'], // Silver -> Orange -> White
+                        color: ['#A1A1AA', '#00F0FF', '#FFFFFF'],
                         duration: 600,
                         easing: 'easeOutCubic'
                     });
 
-                    // Transform Active Pill
                     anime({
                         targets: entry.target,
-                        borderColor: '#E07B39', // Accent glow
-                        translateX: window.innerWidth >= 768 ? 32 : 0, // Slide right on desktop only
+                        borderColor: '#00F0FF',
+                        translateX: window.innerWidth >= 768 ? 32 : 0,
                         scale: 1.02,
                         duration: 400,
                         easing: 'easeOutQuint'
                     });
                 } else {
-                    // Revert Inactive Pill
                     anime({
                         targets: entry.target,
-                        borderColor: '#27272A', // Zinc-800
+                        borderColor: '#27272A',
                         translateX: 0,
                         scale: 1,
                         duration: 400,
@@ -379,9 +398,7 @@
             });
         }, observerOptions);
 
-        // Bind observer to pills
         document.querySelectorAll('.cap-pill').forEach(pill => capObserver.observe(pill));
-
 
         // 4. Button Tactile Micro-Interactions (Anime.js)
         document.querySelectorAll('.anim-btn').forEach(btn => {
@@ -395,7 +412,6 @@
                 anime({ targets: btn, scale: 1, duration: 300, easing: 'easeOutQuad' });
             });
         });
-
     </script>
 </body>
 </html>
