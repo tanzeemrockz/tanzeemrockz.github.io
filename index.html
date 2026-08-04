@@ -147,6 +147,11 @@
             </div>
 
             <div class="md:w-7/12 md:py-[40vh] flex flex-col gap-8 md:gap-32 pb-24 z-0">
+                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Interactive Terminal Engines">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-terminal text-2xl text-cyan"></i></div>
+                    <div><h3 class="font-bold text-xl mb-1">CLI & Web Terminals</h3><p class="text-sm text-zinc-500">Unix-style interactive shells and command interpreters.</p></div>
+                </div>
+
                 <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="HTML5 Canvas 2D & Web Audio">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-gamepad text-2xl text-cyan"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Canvas & Audio Synthesizers</h3><p class="text-sm text-zinc-500">Pure 2D/3D projection engines and audio nodes.</p></div>
@@ -171,27 +176,52 @@
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-css3-alt text-2xl text-silver"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Modern UI Design</h3><p class="text-sm text-zinc-500">Engineered with Tailwind CSS tokens.</p></div>
                 </div>
-                
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="JavaScript (ES6+) Engine">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-js text-2xl text-accent"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">JavaScript (ES6+)</h3><p class="text-sm text-zinc-500">Advanced logic and interactive DOM engines.</p></div>
-                </div>
             </div>
         </div>
     </section>
 
-    <section id="projects" class="md:h-[300vh] relative w-full border-t border-zinc-800/50 bg-matte md:bg-transparent">
+    <section id="projects" class="md:h-[400vh] relative w-full border-t border-zinc-800/50 bg-matte md:bg-transparent">
         <div class="md:sticky top-0 h-auto md:h-screen flex flex-col justify-center overflow-hidden py-24 md:py-0">
             
             <div class="max-w-6xl mx-auto px-6 w-full mb-12 shrink-0 relative z-20">
                 <h2 class="text-3xl md:text-5xl font-black">Featured Builds</h2>
             </div>
             
-            <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[250vw] transition-transform duration-75 ease-linear will-change-transform">
+            <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[320vw] transition-transform duration-75 ease-linear will-change-transform">
                 
                 <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
                     <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan/10 rounded-full blur-3xl group-hover:bg-cyan/20 transition-all"></div>
                     
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
+                            <i class="fa-solid fa-terminal text-2xl text-cyan"></i>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">CLI Workstation</span>
+                    </div>
+                    
+                    <h3 class="text-3xl font-black mb-4 text-white font-mono">CyberShell v1.0</h3>
+                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
+                        An interactive, retro-futuristic Unix-style terminal interface featuring custom character-level block cursor rendering, Web Audio synthesis, Matrix rain canvas shaders, and built-in CLI games.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-3 mb-12 font-mono text-xs">
+                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Vanilla JS</span>
+                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Web Audio API</span>
+                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Canvas 2D</span>
+                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
+                        <a href="./cybershell/" target="_blank" class="anim-btn bg-cyan text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                            Open Terminal 💻 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
+                        </a>
+                        <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
+                            <i class="fa-brands fa-github"></i> Source Code
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
                     <div class="flex items-center justify-between mb-8">
                         <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
                             <i class="fa-solid fa-flag-checkered text-2xl text-cyan"></i>
@@ -260,9 +290,9 @@
                         <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-zinc-400 bg-matte px-4 py-2 rounded-full border border-zinc-800 mb-8">
                             <i class="fa-solid fa-flask text-silver mr-2"></i> In The Lab
                         </span>
-                        <h3 class="text-3xl font-black mb-4 text-zinc-300">Next Build in Progress...</h3>
+                        <h3 class="text-3xl font-black mb-4 text-zinc-300">AssetSlayer In Progress...</h3>
                         <p class="text-zinc-500 text-base leading-relaxed mb-10">
-                            Currently architecting our next major project. Stay tuned on our Instagram for development updates and early beta testing.
+                            Currently architecting zero-server developer asset tools. Stay tuned on our Instagram for development updates and beta releases.
                         </p>
                         <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="anim-btn inline-flex items-center gap-2 text-white bg-matte border border-zinc-700 text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-zinc-800 transition shadow-lg">
                             <i class="fa-brands fa-instagram"></i> Follow for updates
@@ -316,7 +346,6 @@
         function onScrollEngine() {
             const isDesktop = window.innerWidth >= 768;
             
-            // Bypass pinning scrub on mobile devices
             if (!isDesktop) {
                 heroContent.style.opacity = 1;
                 heroContent.style.transform = 'none';
