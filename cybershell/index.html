@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShell v1.0 - CyberSlayerCorpz Terminal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deep: '#09090B',
+                        matte: '#121215',
+                        cyan: '#00F0FF',
+                        pink: '#FF007F',
+                        orange: '#E07B39'
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: #09090B;
+            color: var(--term-color, #00F0FF);
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+        }
+
+        :root {
+            --term-color: #00F0FF;
+            --term-glow: rgba(0, 240, 255, 0.4);
+        }
+
+        .term-text { color: var(--term-color); }
+        .term-glow { text-shadow: 0 0 8px var(--term-glow); }
+
+        /* CRT Overlay Effects */
+        .crt-scanlines {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+        .vignette {
+            background: radial-gradient(circle, rgba(0,0,0,0) 65%, rgba(0,0,0,0.85) 100%);
+            pointer-events: none;
+        }
+
+        /* Scrollbar */
+        #output::-webkit-scrollbar { width: 6px; }
+        #output::-webkit-scrollbar-track { background: #09090B; }
+        #output::-webkit-scrollbar-thumb { background: #18181B; border-radius: 3px; }
+
+        /* Authentic Block Cursor Formatting */
+        .cursor-block {
+            background-color: var(--term-color);
+            color: #09090B !important;
+            box-shadow: 0 0 8px var(--term-glow);
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        #matrix-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen p-4 md:p-8 select-none">
+
+    <canvas id="matrix-canvas"></canvas>
+    <div class="absolute inset-0 crt-scanlines z-10"></div>
+    <div class="absolute inset-0 vignette z-11"></div>
+
+    <div class="relative z-20 flex flex-col h-full w-full max-w-5xl mx-auto border border-zinc-800 bg-matte/90 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+        
+        <div class="flex items-center justify-between px-6 py-4 bg-deep/80 border-b border-zinc-800 shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                <span class="text-xs text-zinc-500 font-bold ml-2">CyberShell v1.0.0 — zsh</span>
+            </div>
+            <div class="text-[10px] text-zinc-500 font-bold tracking-widest uppercase flex items-center gap-4">
+                <span>SOUND: <span id="sound-status" class="text-green-400 font-bold">ON</span></span>
+                <span>OPERATOR: <span class="term-text font-black">tanzeemrockz</span></span>
+            </div>
+        </div>
+
+        <div id="output" class="flex-1 p-6 overflow-y-auto space-y-3 text-sm md:text-base leading-relaxed">
+            <div id="banner-container" class="term-glow leading-tight font-bold">
+<pre class="hidden md:block">
+  ██████╗██╗   ██╗██████╗ ███████╗██████╗ ███████╗██╗  ██╗███████╗██╗     ██╗    
+ ██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██╔════╝██║  ██║██╔════╝██║     ██║    
+ ██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝███████╗███████║█████╗  ██║     ██║    
+ ██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗╚════██║██╔══██║██╔══╝  ██║     ██║    
+ ╚██████╗   ██║   ██████╔╝███████╗██║  ██║███████║██║  ██║███████╗███████╗███████╗
+  ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
+</pre>
+            </div>
+            <p class="text-zinc-400 text-xs md:text-sm">Welcome to <span class="term-text font-bold">CyberShell v1.0</span>. Type <span class="term-text font-bold">'help'</span> for structured commands.</p>
+            <div class="border-b border-zinc-800/80 my-4"></div>
+        </div>
+
+        <div class="p-4 bg-deep/90 border-t border-zinc-800 shrink-0 flex items-center gap-3" onclick="focusInput()">
+            <span class="term-text font-bold shrink-0">guest@cyberslayer:~$</span>
+            <div class="relative flex-1 flex items-center overflow-hidden">
+                <input type="text" id="command-input" class="absolute opacity-0 pointer-events-none" autofocus autocomplete="off" spellcheck="false">
+                
+                <div id="command-display" class="font-mono text-sm md:text-base term-text whitespace-pre"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. AUDIO SYNTHESIZER ---
+        let audioCtx;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        function playKeyClick() {
+            if (!soundEnabled || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(500 + Math.random() * 300, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.02);
+        }
+
+        function playEnterBeep() {
+            if (!soundEnabled || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.06);
+        }
+
+        // --- 2. MATRIX RAIN ENGINE ---
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const mCtx = matrixCanvas.getContext('2d');
+        let matrixInterval = null;
+        let isMatrixActive = false;
+
+        function startMatrixRain() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            matrixCanvas.style.opacity = '0.85';
+            isMatrixActive = true;
+
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const fontSize = 14;
+            const columns = Math.floor(matrixCanvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+
+            mCtx.fillStyle = '#09090B';
+            mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+            matrixInterval = setInterval(() => {
+                mCtx.fillStyle = 'rgba(9, 9, 11, 0.08)';
+                mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+                mCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--term-color').trim() || '#00F0FF';
+                mCtx.font = `${fontSize}px 'JetBrains Mono'`;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    mCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }, 33);
+        }
+
+        function stopMatrixRain() {
+            if (!isMatrixActive) return;
+            clearInterval(matrixInterval);
+            matrixCanvas.style.opacity = '0';
+            isMatrixActive = false;
+        }
+
+        // --- 3. TERMINAL LOGIC & COMMANDS ---
+        const output = document.getElementById('output');
+        const input = document.getElementById('command-input');
+        const display = document.getElementById('command-display');
+        const startTime = Date.now();
+
+        const history = [];
+        let historyIndex = -1;
+
+        function renderHelpTable() {
+            return `
+<p class="text-white font-bold mb-2">CyberShell Utility Commands (v1.0):</p>
+<div class="grid grid-cols-1 gap-y-1 font-mono text-xs md:text-sm">
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">projects, ls</span><span class="text-zinc-400">List all active CyberSlayerCorpz software</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">launch [app]</span><span class="text-zinc-400">Open build ('cyberdrive' | 'shareshed')</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">sysinfo</span><span class="text-zinc-400">Display client telemetry spec sheet</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">matrix</span><span class="text-zinc-400">Trigger Matrix digital rain animation</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">snake</span><span class="text-zinc-400">Launch in-terminal Snake mini-game</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">audio [on|off]</span><span class="text-zinc-400">Enable/Disable Web Audio key clicks</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">theme [color]</span><span class="text-zinc-400">Switch color theme (cyan, orange, pink)</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">whoami</span><span class="text-zinc-400">Show operator & studio credentials</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">clear</span><span class="text-zinc-400">Clear terminal buffer screen</span></div>
+  <div class="flex"><span class="term-text font-bold w-36 shrink-0">socials</span><span class="text-zinc-400">View official links and repositories</span></div>
+</div>
+`;
+        }
+
+        const COMMANDS = {
+            help: renderHelpTable(),
+            projects: `
+<span class="text-white font-bold">ACTIVE STUDIO BUILDS:</span>
+  [1] <span class="term-text font-bold">cyberdrive</span>   - 80s Synthwave Pseudo-3D Racer
+  [2] <span class="term-text font-bold">shareshed</span>    - Neighborhood Tool Sharing PWA
+  [3] <span class="term-text font-bold">assetslayer</span>  - Zero-Server Developer Tools [Lab]
+
+Type <span class="term-text">'launch cyberdrive'</span> to open.
+`,
+            ls: `
+<span class="text-white font-bold">DIRECTORY CONTENTS:</span>
+  drwxr-xr-x  cyberdrive/
+  drwxr-xr-x  shareshed/
+  drwxr-xr-x  assetslayer/
+  -rw-r--r--  README.md
+`,
+            whoami: `
+<span class="text-white font-bold">STUDIO TELEMETRY:</span>
+  Studio Name : CyberSlayerCorpz
+  Operator    : tanzeemrockz
+  Focus       : High-Impact, Client-Side Web Apps
+  Portfolio   : tanzeemrockz.github.io
+`,
+            socials: `
+<span class="text-white font-bold">OFFICIAL LINKS:</span>
+  GitHub    : https://github.com/tanzeemrockz
+  Portfolio : https://tanzeemrockz.github.io
+  Instagram : https://instagram.com/cyberslayercorpz
+  ShareShed : https://instagram.com/shareshedapp
+`
+        };
+
+        function getSysInfo() {
+            const uptime = Math.floor((Date.now() - startTime) / 1000);
+            return `
+<pre class="term-text leading-tight text-xs md:text-sm">
+        /\\          <span class="text-white font-bold">CyberSlayerCorpz OS v1.0</span>
+       /  \\         ------------------------
+      / /\\ \\        <span class="text-zinc-400">OS:</span> CyberShell Client
+     / /  \\ \\       <span class="text-zinc-400">Host:</span> ${navigator.platform}
+    / /____\\ \\      <span class="text-zinc-400">Resolution:</span> ${window.innerWidth}x${window.innerHeight}
+   /________  \\     <span class="text-zinc-400">Uptime:</span> ${uptime}s
+  /__________\\ \\    <span class="text-zinc-400">Status:</span> 100% Client-Side Engine
+</pre>
+`;
+        }
+
+        // --- 4. ACCURATE BLOCK CURSOR RENDERING ---
+        function updateDisplay() {
+            const val = input.value;
+            const pos = input.selectionStart || val.length;
+
+            const before = val.substring(0, pos);
+            const currentChar = val.charAt(pos) || ' ';
+            const after = val.substring(pos + 1);
+
+            display.innerHTML = `${escapeHtml(before)}<span class="cursor-block">${escapeHtml(currentChar)}</span>${escapeHtml(after)}`;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function focusInput() {
+            input.focus();
+        }
+
+        function appendOutput(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function executeCommand(cmdStr) {
+            stopMatrixRain();
+
+            const trimmed = cmdStr.trim();
+            if (!trimmed) return;
+
+            appendOutput(`<div class="flex items-center gap-2"><span class="term-text font-bold">guest@cyberslayer:~$</span> <span>${escapeHtml(trimmed)}</span></div>`);
+            
+            history.push(trimmed);
+            historyIndex = history.length;
+
+            const parts = trimmed.split(' ');
+            const mainCmd = parts[0].toLowerCase();
+            const arg = parts[1] ? parts[1].toLowerCase() : null;
+
+            if (mainCmd === 'clear') {
+                output.innerHTML = '';
+            } else if (mainCmd === 'matrix') {
+                appendOutput('<p class="term-text font-bold">Matrix Rain Engine engaged. Press any key to dismiss.</p>');
+                startMatrixRain();
+            } else if (mainCmd === 'sysinfo' || mainCmd === 'neofetch') {
+                appendOutput(getSysInfo());
+            } else if (mainCmd === 'audio') {
+                if (arg === 'off') {
+                    soundEnabled = false;
+                    document.getElementById('sound-status').innerText = 'OFF';
+                    document.getElementById('sound-status').className = 'text-red-400 font-bold';
+                    appendOutput('<p class="text-zinc-400">Keystroke audio <span class="text-red-400 font-bold">disabled</span>.</p>');
+                } else {
+                    soundEnabled = true;
+                    document.getElementById('sound-status').innerText = 'ON';
+                    document.getElementById('sound-status').className = 'text-green-400 font-bold';
+                    appendOutput('<p class="text-zinc-400">Keystroke audio <span class="text-green-400 font-bold">enabled</span>.</p>');
+                }
+            } else if (mainCmd === 'theme') {
+                if (arg === 'orange') {
+                    document.documentElement.style.setProperty('--term-color', '#E07B39');
+                    document.documentElement.style.setProperty('--term-glow', 'rgba(224, 123, 57, 0.4)');
+                    appendOutput('<p class="text-zinc-400">Theme set to <span class="text-orange font-bold">Orange</span>.</p>');
+                } else if (arg === 'pink') {
+                    document.documentElement.style.setProperty('--term-color', '#FF007F');
+                    document.documentElement.style.setProperty('--term-glow', 'rgba(255, 0, 127, 0.4)');
+                    appendOutput('<p class="text-zinc-400">Theme set to <span class="text-pink font-bold">Pink</span>.</p>');
+                } else {
+                    document.documentElement.style.setProperty('--term-color', '#00F0FF');
+                    document.documentElement.style.setProperty('--term-glow', 'rgba(0, 240, 255, 0.4)');
+                    appendOutput('<p class="text-zinc-400">Theme set to <span class="text-cyan font-bold">Cyan</span>.</p>');
+                }
+            } else if (mainCmd === 'launch') {
+                if (arg === 'cyberdrive') {
+                    appendOutput('<p class="text-zinc-400">Launching <span class="term-text font-bold">CyberDrive</span>...</p>');
+                    window.open('https://cyberdrive.vercel.app', '_blank');
+                } else if (arg === 'shareshed') {
+                    appendOutput('<p class="text-zinc-400">Launching <span class="text-orange font-bold">ShareShed</span>...</p>');
+                    window.open('https://shareshed-bice.vercel.app', '_blank');
+                } else {
+                    appendOutput('<p class="text-red-400">Unknown target. Try: <span class="text-white">launch cyberdrive</span> or <span class="text-white">launch shareshed</span></p>');
+                }
+            } else if (COMMANDS[mainCmd]) {
+                appendOutput(COMMANDS[mainCmd]);
+            } else {
+                appendOutput(`<p class="text-red-400">Command not found: '${escapeHtml(trimmed)}'. Type <span class="term-text">'help'</span> for manual.</p>`);
+            }
+        }
+
+        // --- 5. EVENT LISTENERS ---
+        input.addEventListener('input', () => {
+            initAudio();
+            playKeyClick();
+            updateDisplay();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            initAudio();
+
+            if (e.key === 'Enter') {
+                playEnterBeep();
+                executeCommand(input.value);
+                input.value = '';
+                updateDisplay();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = history[historyIndex];
+                    updateDisplay();
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < history.length - 1) {
+                    historyIndex++;
+                    input.value = history[historyIndex];
+                } else {
+                    historyIndex = history.length;
+                    input.value = '';
+                }
+                updateDisplay();
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                const val = input.value.trim().toLowerCase();
+                const allCmds = [...Object.keys(COMMANDS), 'sysinfo', 'neofetch', 'matrix', 'snake', 'audio', 'theme', 'clear'];
+                const matches = allCmds.filter(c => c.startsWith(val));
+                if (matches.length === 1) {
+                    input.value = matches[0];
+                    updateDisplay();
+                }
+            }
+            setTimeout(updateDisplay, 10);
+        });
+
+        document.addEventListener('keyup', updateDisplay);
+        document.addEventListener('click', focusInput);
+        
+        // Initial draw
+        updateDisplay();
+    </script>
+</body>
+</html>
