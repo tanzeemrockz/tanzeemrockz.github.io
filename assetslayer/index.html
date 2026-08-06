@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetSlayer v1.0 | CyberSlayerCorpz</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%2300F0FF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deep: '#121215',
+                        matte: '#18181B',
+                        silver: '#A1A1AA',
+                        cyan: '#00F0FF',
+                        pink: '#FF007F',
+                        accent: '#E07B39',
+                        sig: 'rgb(211,84,0)'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #121215;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Custom Matte Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #121215; }
+        ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 4px; border: 1px solid #18181B; }
+        ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
+
+        /* Glassmorphism Header */
+        .glass-nav {
+            background: rgba(18, 18, 21, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Split-screen Visual Inspector */
+        .comparison-stage {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            background: #09090b;
+            overflow: hidden;
+            user-select: none;
+            border-radius: 1.5rem;
+            border: 1px solid #27272A;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        }
+        .img-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .img-layer img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        .img-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 50%;
+            overflow: hidden;
+            border-right: 2px solid #00F0FF;
+            box-shadow: 2px 0 15px rgba(0, 240, 255, 0.4);
+        }
+        .split-handle {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: transparent;
+            cursor: ew-resize;
+            z-index: 20;
+        }
+        .split-button {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 38px; height: 38px;
+            background: #00F0FF;
+            color: #121215;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            transition: transform 0.15s ease-out;
+        }
+        .split-handle:hover .split-button {
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+
+        /* Inputs & Cyber UI */
+        input[type="range"] { accent-color: #00F0FF; }
+        .cyber-input {
+            background: #121215;
+            border: 1px solid #27272A;
+            color: #FFF;
+            padding: 0.85rem 1.2rem;
+            border-radius: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .cyber-input:focus { border-color: #00F0FF; }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen selection:bg-cyan selection:text-black">
+
+    <nav class="fixed w-full top-0 z-50 glass-nav">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <svg id="nav-logo" class="w-8 h-8 transition-transform duration-500 group-hover:rotate-90" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="500" height="500" rx="100" fill="#18181B"/>
+                    <g stroke-width="16" stroke-linecap="square">
+                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/>
+                        <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/>
+                    </g>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-white">CyberSlayer<span class="text-silver">Corpz</span></span>
+            </a>
+            
+            <div class="flex items-center gap-4">
+                <span id="globalQueueCount" class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">
+                    0 ASSETS IN QUEUE
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 w-full max-w-6xl mx-auto px-6 pt-32 pb-40 flex flex-col gap-12">
+        
+        <div class="flex flex-col items-start pt-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-matte text-xs font-semibold tracking-widest text-silver mb-6 shadow-lg">
+                <span class="text-cyan animate-pulse"><i class="fa-solid fa-bolt"></i></span> ZERO-SERVER CANVAS ENGINE
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4">
+                Slay, compress & convert<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-pink to-accent">your web assets instantly.</span>
+            </h1>
+            
+            <p class="text-silver text-base md:text-lg max-w-2xl font-medium leading-relaxed">
+                100% browser-based image optimization powered by HTML5 Canvas math. Zero server uploads. High-fidelity WebP, JPEG, and PNG conversions.
+            </p>
+        </div>
+
+        <section class="flex flex-col gap-8">
+            <div id="imgDropzone" class="relative group cursor-pointer border-2 border-dashed border-zinc-800 hover:border-cyan bg-matte/80 backdrop-blur-md rounded-3xl p-12 lg:p-16 text-center transition-all duration-300 shadow-2xl">
+                <input type="file" id="imgInput" accept="image/jpeg, image/png, image/webp" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center border border-zinc-700 mx-auto mb-6 group-hover:scale-110 group-hover:border-cyan transition duration-300 shadow-lg">
+                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-cyan"></i>
+                </div>
+                <h3 class="text-2xl font-black mb-2 text-white">Drop images here or <span class="text-cyan underline underline-offset-4">browse</span></h3>
+                <p class="text-silver text-sm font-medium">Real-time Canvas quantization & EXIF metadata scrubbing for JPEG, PNG, and WebP</p>
+            </div>
+
+            <div id="imgInspector" class="hidden flex-col bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl gap-8">
+                <div class="flex flex-wrap justify-between items-center gap-4 pb-6 border-b border-zinc-800">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-matte rounded-2xl flex items-center justify-center border border-zinc-700 shrink-0">
+                            <i class="fa-solid fa-sliders text-cyan text-xl"></i>
+                        </div>
+                        <div>
+                            <span id="imgActiveName" class="font-bold text-white font-mono text-base block">active-asset.png</span>
+                            <span class="text-xs text-silver font-mono">HTML5 Canvas Processing Unit</span>
+                        </div>
+                    </div>
+                    <span id="imgSavingsBadge" class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">
+                        -0% SAVED
+                    </span>
+                </div>
+
+                <div id="imgCompareContainer" class="comparison-stage">
+                    <div class="img-layer"><img id="imgSource" src="" alt="Source Asset" /></div>
+                    <div class="img-layer img-overlay" id="imgOverlay"><img id="imgSlayed" src="" alt="Slayed Asset" /></div>
+                    <div class="split-handle" id="imgSplitHandle">
+                        <div class="split-button"><i class="fa-solid fa-left-right"></i></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 bg-matte p-8 rounded-2xl border border-zinc-800/80">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-silver font-mono">Format Target</label>
+                        <select id="imgFormat" class="cyber-input">
+                            <option value="image/webp">WebP (Recommended)</option>
+                            <option value="image/jpeg">JPEG</option>
+                            <option value="image/png">PNG</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2 col-span-1 md:col-span-2">
+                        <div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-silver font-mono">
+                            <label>Compression Level</label>
+                            <span id="imgQualityVal" class="text-cyan font-mono">80%</span>
+                        </div>
+                        <input type="range" id="imgQuality" min="1" max="100" value="80" class="w-full mt-3">
+                    </div>
+
+                    <div class="flex flex-col gap-3 justify-end">
+                        <button id="btnSlayImg" class="anim-btn bg-cyan text-black text-xs font-bold px-6 py-3.5 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)] w-full">
+                            <i class="fa-solid fa-bolt mr-2"></i> SLAY & CONVERT ASSET
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="queueSection" class="bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col gap-6">
+            <div class="flex justify-between items-center pb-6 border-b border-zinc-800">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-700 shrink-0">
+                        <i class="fa-solid fa-layer-group text-cyan text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Universal Batch Queue</h3>
+                        <span class="text-xs text-silver font-mono">Consolidated local memory cache</span>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button onclick="clearQueue()" class="text-xs font-mono font-bold text-pink hover:underline">Clear Queue</button>
+                    <button onclick="downloadAll()" class="anim-btn bg-white text-black font-bold text-xs px-6 py-3.5 rounded-xl hover:bg-gray-200 transition shadow-lg">
+                        Slay & Download All
+                    </button>
+                </div>
+            </div>
+
+            <div id="queueList" class="flex flex-col gap-3">
+                <div class="text-center py-8 text-zinc-600 font-mono text-xs" id="emptyQueueMsg">Queue is empty. Drop images above to begin.</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-auto bg-deep py-20 px-6 border-t border-zinc-800/80 relative z-20">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            
+            <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke-width="16" stroke-linecap="square">
+                            <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/>
+                            <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/>
+                        </g>
+                    </svg>
+                    <span class="font-bold text-xl tracking-tight text-white">CyberSlayer<span class="text-silver">Corpz</span></span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-2">© 2026 CyberSlayerCorpz. All rights reserved.</p>
+                <p class="text-sm text-zinc-500">
+                    Made with ❤️ by <span class="text-sig font-bold">tanzeemrockz</span> | 
+                    Operator: <a href="https://tanzeemrockz.github.io" target="_blank" class="text-white hover:text-sig underline underline-offset-2 transition">CyberSlayerCorpz</a>
+                </p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm font-semibold text-zinc-400">
+                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-instagram"></i> @cyberslayercorpz</a>
+                <a href="https://github.com/tanzeemrockz" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-github"></i> GitHub</a>
+                <a href="mailto:cyberslayercorpz@gmail.com" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-envelope"></i> Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const globalQueue = [];
+        let activeImageFile = null;
+
+        const formatBytes = (bytes, decimals = 2) => {
+            if (!+bytes) return '0 B';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+        };
+
+        function pushToQueue(filename, origSize, slayedSize, blobUrl, typeLabel) {
+            globalQueue.push({ filename, origSize, slayedSize, blobUrl, typeLabel });
+            updateQueueUI();
+        }
+
+        function updateQueueUI() {
+            const list = document.getElementById('queueList');
+            const msg = document.getElementById('emptyQueueMsg');
+            const count = document.getElementById('globalQueueCount');
+            
+            count.textContent = `${globalQueue.length} ASSETS IN QUEUE`;
+            
+            if (globalQueue.length === 0) {
+                list.innerHTML = '';
+                list.appendChild(msg);
+                msg.style.display = 'block';
+                return;
+            }
+            msg.style.display = 'none';
+            list.innerHTML = '';
+
+            globalQueue.forEach((item) => {
+                const diff = item.origSize - item.slayedSize;
+                const pct = ((diff / item.origSize) * 100).toFixed(1);
+                const isSaved = diff > 0;
+                
+                const el = document.createElement('div');
+                el.className = 'flex justify-between items-center bg-matte border border-zinc-800 p-4 rounded-2xl text-xs font-mono';
+                el.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-3 py-1 rounded-full border border-cyan/20">${item.typeLabel}</span>
+                        <span class="text-white font-bold truncate max-w-[200px]" title="${item.filename}">${item.filename}</span>
+                    </div>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="text-zinc-500 hidden sm:inline">${formatBytes(item.origSize)} &rarr;</span>
+                        <span class="font-bold text-white">${formatBytes(item.slayedSize)}</span>
+                        <span class="${isSaved ? 'text-cyan' : 'text-pink'} font-bold w-16 text-right">${isSaved ? '-' : '+'}${Math.abs(pct)}%</span>
+                        <a href="${item.blobUrl}" download="${item.filename}" class="anim-btn bg-deep border border-zinc-700 hover:border-cyan text-white p-2.5 rounded-xl transition">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+            bindTactileButtons();
+        }
+
+        function clearQueue() {
+            globalQueue.forEach(item => URL.revokeObjectURL(item.blobUrl));
+            globalQueue.length = 0;
+            updateQueueUI();
+        }
+
+        function downloadAll() {
+            globalQueue.forEach(item => {
+                const a = document.createElement('a');
+                a.href = item.blobUrl;
+                a.download = item.filename;
+                a.click();
+            });
+        }
+
+        // ==========================================
+        // 🖼️ IMAGE SLAYER ENGINE
+        // ==========================================
+        const imgInput = document.getElementById('imgInput');
+        const imgDropzone = document.getElementById('imgDropzone');
+        const imgInspector = document.getElementById('imgInspector');
+        const imgSource = document.getElementById('imgSource');
+        const imgSlayed = document.getElementById('imgSlayed');
+        const imgFormat = document.getElementById('imgFormat');
+        const imgQuality = document.getElementById('imgQuality');
+        const imgQualityVal = document.getElementById('imgQualityVal');
+        
+        let imgOrigSize = 0;
+        let imgOrigName = "";
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eName => {
+            imgDropzone.addEventListener(eName, e => { e.preventDefault(); e.stopPropagation(); });
+        });
+        imgDropzone.addEventListener('dragover', () => imgDropzone.classList.add('border-cyan'));
+        imgDropzone.addEventListener('dragleave', () => imgDropzone.classList.remove('border-cyan'));
+        imgDropzone.addEventListener('drop', e => {
+            imgDropzone.classList.remove('border-cyan');
+            if(e.dataTransfer.files.length) handleImage(e.dataTransfer.files[0]);
+        });
+        imgInput.addEventListener('change', e => { if(e.target.files.length) handleImage(e.target.files[0]); });
+
+        function handleImage(file) {
+            if (!file.type.startsWith('image/')) return;
+            activeImageFile = file;
+            imgOrigSize = file.size;
+            imgOrigName = file.name;
+            document.getElementById('imgActiveName').textContent = file.name;
+            
+            const url = URL.createObjectURL(file);
+            imgSource.src = url;
+            imgInspector.classList.remove('hidden');
+            imgInspector.classList.add('flex');
+            
+            imgSource.onload = () => processImage();
+        }
+
+        function processImage() {
+            if (!activeImageFile) return;
+            const canvas = document.createElement('canvas');
+            canvas.width = imgSource.naturalWidth;
+            canvas.height = imgSource.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(imgSource, 0, 0);
+
+            const format = imgFormat.value;
+            const quality = parseInt(imgQuality.value) / 100;
+
+            canvas.toBlob(blob => {
+                if(!blob) return;
+                const slayedUrl = URL.createObjectURL(blob);
+                imgSlayed.src = slayedUrl;
+                
+                const diff = imgOrigSize - blob.size;
+                const pct = ((diff / imgOrigSize) * 100).toFixed(1);
+                const badge = document.getElementById('imgSavingsBadge');
+                
+                if (diff > 0) {
+                    badge.textContent = `-${pct}% SAVED`;
+                    badge.className = "text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20";
+                } else {
+                    badge.textContent = `+${Math.abs(pct)}% LARGER`;
+                    badge.className = "text-[10px] font-bold uppercase tracking-wider text-pink bg-pink/10 px-4 py-2 rounded-full border border-pink/20";
+                }
+            }, format, quality);
+        }
+
+        imgFormat.addEventListener('change', processImage);
+        imgQuality.addEventListener('input', e => {
+            imgQualityVal.textContent = e.target.value + '%';
+            processImage();
+        });
+
+        // Split Slider Logic
+        const compareContainer = document.getElementById('imgCompareContainer');
+        const imgOverlay = document.getElementById('imgOverlay');
+        const imgSplitHandle = document.getElementById('imgSplitHandle');
+        let isDraggingImg = false;
+        
+        imgSplitHandle.addEventListener('mousedown', () => isDraggingImg = true);
+        window.addEventListener('mouseup', () => isDraggingImg = false);
+        window.addEventListener('mousemove', e => {
+            if(!isDraggingImg) return;
+            const rect = compareContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            const pct = (x / rect.width) * 100;
+            imgOverlay.style.width = `${pct}%`;
+            imgSplitHandle.style.left = `${pct}%`;
+        });
+
+        // Main Slay & Convert Handler
+        document.getElementById('btnSlayImg').addEventListener('click', () => {
+            if(!activeImageFile) return;
+            const format = imgFormat.value;
+            const ext = format === 'image/webp' ? 'webp' : format === 'image/jpeg' ? 'jpg' : 'png';
+            const baseName = imgOrigName.substring(0, imgOrigName.lastIndexOf('.')) || imgOrigName;
+            const slayedName = `${baseName}_slayed.${ext}`;
+
+            fetch(imgSlayed.src).then(r => r.blob()).then(blob => {
+                pushToQueue(slayedName, imgOrigSize, blob.size, URL.createObjectURL(blob), ext.toUpperCase());
+            });
+        });
+
+        // Tactile Button Feedback (Anime.js)
+        function bindTactileButtons() {
+            document.querySelectorAll('.anim-btn').forEach(btn => {
+                btn.onmousedown = () => anime({ targets: btn, scale: 0.95, duration: 150, easing: 'easeOutQuad' });
+                btn.onmouseup = () => anime({ targets: btn, scale: 1, duration: 400, easing: 'easeOutElastic(1, .6)' });
+                btn.onmouseleave = () => anime({ targets: btn, scale: 1, duration: 300, easing: 'easeOutQuad' });
+            });
+        }
+        bindTactileButtons();
+    </script>
+</body>
+</html>
