@@ -6,7 +6,6 @@
     <title>CyberSlayerCorpz | Indie Software Studio</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -43,14 +42,11 @@
             color: #FFFFFF;
             overflow-x: hidden;
         }
-        
-        /* Custom Matte Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #121215; }
         ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 4px; border: 1px solid #18181B; }
         ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
 
-        /* Glassmorphism Header */
         .glass-nav {
             background: rgba(18, 18, 21, 0.75);
             backdrop-filter: blur(12px);
@@ -58,12 +54,103 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Scrollytelling Utility Classes */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes crtGlitch {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            20% { transform: translate(-3px, 3px); filter: hue-rotate(90deg); }
+            40% { transform: translate(-3px, -3px); filter: hue-rotate(180deg); }
+            60% { transform: translate(3px, 3px); filter: hue-rotate(270deg); }
+            80% { transform: translate(3px, -3px); filter: hue-rotate(360deg); }
+            100% { transform: translate(0); filter: hue-rotate(0deg); }
+        }
+        .crt-glitch {
+            animation: crtGlitch 0.25s infinite ease-in-out;
+        }
+
+        .dimmed {
+            opacity: 0.15 !important;
+            filter: grayscale(80%);
+            transition: all 0.4s ease-out;
+        }
+        .highlighted {
+            opacity: 1 !important;
+            border-color: #00F0FF !important;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3) !important;
+            transition: all 0.4s ease-out;
+        }
+
+        .tech-pill.active-filter {
+            background-color: #00F0FF !important;
+            color: #121215 !important;
+            border-color: #00F0FF !important;
+            font-weight: 800;
+        }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 240, 255, 0.08), transparent 40%);
+            pointer-events: none;
+            z-index: 1;
+            border-radius: inherit;
+        }
+
+        #cursor-aura {
+            position: fixed;
+            top: 0; left: 0;
+            width: 350px; height: 350px;
+            margin-left: -175px; margin-top: -175px;
+            background: radial-gradient(circle, rgba(0,240,255,0.07) 0%, rgba(255,0,127,0.03) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+            transition: opacity 0.3s ease;
+        }
+
+        .border-beam {
+            position: relative;
+        }
+        .border-beam::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(90deg, transparent, #00F0FF, #FF007F, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .border-beam:hover::after {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen selection:bg-cyan selection:text-black">
+
+    <div id="cursor-aura" class="hidden md:block"></div>
+
+    <div class="fixed top-0 left-0 w-full h-[2px] bg-deep z-50 pointer-events-none">
+        <div id="scroll-progress" class="h-full bg-gradient-to-r from-cyan via-pink to-accent w-0 transition-all duration-75"></div>
+    </div>
 
     <nav class="fixed w-full top-0 z-50 glass-nav">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -81,12 +168,23 @@
             <div class="hidden md:flex items-center gap-8">
                 <a href="#projects" class="text-sm font-medium text-silver hover:text-white transition">Projects</a>
                 <a href="#capabilities" class="text-sm font-medium text-silver hover:text-white transition">Tech Stack</a>
+                
+                <button onclick="toggleCmdPalette()" class="anim-btn flex items-center gap-2 text-xs font-mono bg-matte border border-zinc-800 text-silver px-3 py-1.5 rounded-xl hover:border-zinc-700 hover:text-white transition shadow-lg">
+                    <i class="fa-solid fa-terminal text-cyan"></i>
+                    <span>Cmd+K</span>
+                </button>
+
+                <button id="sfxToggleBtn" onclick="toggleAudioSFX()" class="anim-btn text-xs font-mono text-silver bg-matte border border-zinc-800 px-3 py-1.5 rounded-xl hover:text-white transition shadow-lg">
+                    <i class="fa-solid fa-volume-xmark mr-1 text-pink"></i> SFX: OFF
+                </button>
+
                 <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="anim-btn flex items-center gap-2 text-sm font-medium bg-white text-black px-5 py-2.5 rounded-full hover:bg-gray-200 transition shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                     <i class="fa-brands fa-instagram"></i> Instagram
                 </a>
             </div>
             
-            <div class="md:hidden">
+            <div class="md:hidden flex items-center gap-3">
+                <button onclick="toggleCmdPalette()" class="text-silver hover:text-white text-lg p-2"><i class="fa-solid fa-terminal"></i></button>
                 <button class="text-silver hover:text-white text-2xl focus:outline-none"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
@@ -95,6 +193,8 @@
     <section id="hero-track" class="md:h-[200vh] relative w-full">
         <div class="md:sticky top-0 h-screen flex flex-col justify-center px-6 overflow-hidden relative">
             
+            <canvas id="hero-canvas" class="absolute inset-0 z-0 pointer-events-none w-full h-full opacity-40"></canvas>
+
             <div id="hero-hex" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 opacity-10 pointer-events-none w-32 h-32 hidden md:block">
                 <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
                     <g stroke-width="8" stroke-linecap="square">
@@ -119,10 +219,10 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                    <a href="#projects" class="anim-btn inline-flex justify-center items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-gray-200 transition">
+                    <a href="#projects" class="anim-btn inline-flex justify-center items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-gray-200 transition shadow-lg">
                         View Flagship Builds <i class="fa-solid fa-arrow-down text-sm"></i>
                     </a>
-                    <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn inline-flex justify-center items-center gap-2 border border-zinc-800 bg-matte text-white font-semibold px-8 py-4 rounded-xl hover:border-zinc-700 transition">
+                    <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn inline-flex justify-center items-center gap-2 border border-zinc-800 bg-matte text-white font-semibold px-8 py-4 rounded-xl hover:border-zinc-700 transition shadow-lg">
                         <i class="fa-brands fa-github text-lg"></i> GitHub Profile
                     </a>
                 </div>
@@ -137,7 +237,7 @@
                 <h2 class="text-3xl md:text-5xl font-black mb-6">Core Stack &<br>Capabilities</h2>
                 <p class="text-silver mb-8 text-lg font-medium leading-relaxed">We build robust software and fluid interfaces using modern, battle-tested technologies.</p>
                 
-                <div class="p-8 border border-zinc-800 bg-matte/80 backdrop-blur-md rounded-3xl shadow-2xl relative overflow-hidden">
+                <div class="p-8 border border-zinc-800 bg-matte/80 backdrop-blur-md rounded-3xl shadow-2xl relative overflow-hidden spotlight-card border-beam">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan via-pink to-accent"></div>
                     <p class="text-[10px] text-zinc-500 mb-3 uppercase tracking-[0.2em] font-bold flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span> Active Module Target
@@ -147,32 +247,32 @@
             </div>
 
             <div class="md:w-7/12 md:py-[40vh] flex flex-col gap-8 md:gap-32 pb-24 z-0">
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Interactive Terminal Engines">
+                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl" data-module="Interactive Terminal Engines" data-tags="Vanilla JS, CLI">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-terminal text-2xl text-cyan"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">CLI & Web Terminals</h3><p class="text-sm text-zinc-500">Unix-style interactive shells and command interpreters.</p></div>
                 </div>
 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="HTML5 Canvas 2D & Web Audio">
+                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl" data-module="HTML5 Canvas 2D & Web Audio" data-tags="Canvas 2D, Web Audio API">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-gamepad text-2xl text-cyan"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Canvas & Audio Synthesizers</h3><p class="text-sm text-zinc-500">Pure 2D/3D projection engines and audio nodes.</p></div>
                 </div>
 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Web & Mobile PWAs">
+                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl" data-module="Web & Mobile PWAs" data-tags="PWA, Tailwind CSS">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-mobile-screen-button text-2xl text-silver"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Web & Mobile Apps</h3><p class="text-sm text-zinc-500">Cross-platform digital experiences.</p></div>
                 </div>
                 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Anime.js & Framer Motion">
+                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl" data-module="Anime.js & Framer Motion" data-tags="Anime.js, Tailwind CSS">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-2xl text-pink"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Fluid UI Animations</h3><p class="text-sm text-zinc-500">Framer Motion & Anime.js engineering.</p></div>
                 </div>
                 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Supabase / PostgreSQL">
+                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl" data-module="Supabase / PostgreSQL" data-tags="Supabase">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-database text-2xl text-silver"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Supabase / PostgreSQL</h3><p class="text-sm text-zinc-500">Robust, real-time backend architecture.</p></div>
                 </div>
                 
-                <div class="cap-pill p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl transition-all duration-500 ease-out" data-module="Modern UI / Tailwind CSS">
+                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl" data-module="Modern UI / Tailwind CSS" data-tags="Tailwind CSS">
                     <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-css3-alt text-2xl text-silver"></i></div>
                     <div><h3 class="font-bold text-xl mb-1">Modern UI Design</h3><p class="text-sm text-zinc-500">Engineered with Tailwind CSS tokens.</p></div>
                 </div>
@@ -183,13 +283,19 @@
     <section id="projects" class="md:h-[400vh] relative w-full border-t border-zinc-800/50 bg-matte md:bg-transparent">
         <div class="md:sticky top-0 h-auto md:h-screen flex flex-col justify-center overflow-hidden py-24 md:py-0">
             
-            <div class="max-w-6xl mx-auto px-6 w-full mb-12 shrink-0 relative z-20">
-                <h2 class="text-3xl md:text-5xl font-black">Featured Builds</h2>
+            <div class="max-w-6xl mx-auto px-6 w-full mb-12 shrink-0 relative z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-black">Featured Builds</h2>
+                    <p class="text-silver text-xs font-mono mt-2">Click any tech pill below to filter related modules</p>
+                </div>
+                <button id="clearFilterBtn" onclick="clearTechFilter()" class="hidden text-xs font-mono text-cyan border border-cyan/30 bg-cyan/10 px-4 py-2 rounded-full hover:bg-cyan hover:text-black transition">
+                    <i class="fa-solid fa-xmark mr-1"></i> Clear Filter
+                </button>
             </div>
             
             <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[320vw] transition-transform duration-75 ease-linear will-change-transform">
                 
-                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
+                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
                     <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan/10 rounded-full blur-3xl group-hover:bg-cyan/20 transition-all"></div>
                     
                     <div class="flex items-center justify-between mb-8">
@@ -205,10 +311,10 @@
                     </p>
                     
                     <div class="flex flex-wrap gap-3 mb-12 font-mono text-xs">
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Vanilla JS</span>
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Web Audio API</span>
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Canvas 2D</span>
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
+                        <span onclick="filterByTech('Vanilla JS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Vanilla JS</span>
+                        <span onclick="filterByTech('Web Audio API')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Web Audio API</span>
+                        <span onclick="filterByTech('Canvas 2D')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Canvas 2D</span>
+                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Tailwind CSS</span>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
@@ -221,7 +327,7 @@
                     </div>
                 </div>
 
-                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
+                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
                     <div class="flex items-center justify-between mb-8">
                         <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
                             <i class="fa-solid fa-flag-checkered text-2xl text-cyan"></i>
@@ -234,11 +340,11 @@
                         A next-gen 80s synthwave pseudo-3D arcade racer built entirely with pure HTML5 Canvas math and Web Audio synthesis. Features procedural track curves, dynamic traffic AI, and nitro heat management.
                     </p>
                     
-                    <div class="flex flex-wrap gap-3 mb-12">
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Canvas 2D</span>
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Web Audio API</span>
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Anime.js</span>
+                    <div class="flex flex-wrap gap-3 mb-12 font-mono text-xs">
+                        <span onclick="filterByTech('Canvas 2D')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Canvas 2D</span>
+                        <span onclick="filterByTech('Web Audio API')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Web Audio API</span>
+                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Tailwind CSS</span>
+                        <span onclick="filterByTech('Anime.js')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Anime.js</span>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
@@ -251,7 +357,7 @@
                     </div>
                 </div>
 
-                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-accent transition duration-300">
+                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-accent transition duration-300">
                     <div class="flex items-center justify-between mb-8">
                         <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
                             <svg viewBox="0 0 100 100" fill="none" class="w-12 h-12">
@@ -267,11 +373,11 @@
                         A peer-to-peer neighborhood tool-sharing platform. Borrow drills, ladders, and equipment locally with built-in deposit safety and real-time chat.
                     </p>
                     
-                    <div class="flex flex-wrap gap-3 mb-12">
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Supabase</span>
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">JavaScript</span>
-                        <span class="text-xs font-semibold text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Vercel</span>
+                    <div class="flex flex-wrap gap-3 mb-12 font-mono text-xs">
+                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">Tailwind CSS</span>
+                        <span onclick="filterByTech('Supabase')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">Supabase</span>
+                        <span onclick="filterByTech('Vanilla JS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">JavaScript</span>
+                        <span onclick="filterByTech('PWA')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">PWA</span>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
@@ -284,7 +390,7 @@
                     </div>
                 </div>
 
-                <div class="w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
+                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
                     <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan/10 rounded-full blur-3xl group-hover:bg-cyan/20 transition-all"></div>
                     
                     <div class="flex items-center justify-between mb-8">
@@ -300,10 +406,10 @@
                     </p>
                     
                     <div class="flex flex-wrap gap-3 mb-12 font-mono text-xs">
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Vanilla JS</span>
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Canvas 2D</span>
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">Tailwind CSS</span>
-                        <span class="text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800">JSZip</span>
+                        <span onclick="filterByTech('Vanilla JS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Vanilla JS</span>
+                        <span onclick="filterByTech('Canvas 2D')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Canvas 2D</span>
+                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Tailwind CSS</span>
+                        <span onclick="filterByTech('JSZip')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">JSZip</span>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
@@ -350,16 +456,75 @@
         </div>
     </footer>
 
+    <div id="cmdPalette" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-6">
+        <div class="bg-deep border border-zinc-800 rounded-3xl w-full max-w-xl p-8 shadow-2xl flex flex-col gap-6 relative">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-terminal text-cyan text-xl"></i>
+                    <span class="font-mono font-bold text-white text-sm">Studio Command Palette</span>
+                </div>
+                <button onclick="toggleCmdPalette()" class="text-zinc-500 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <input type="text" id="cmdInput" placeholder="Type a build, tech tag, or command..." class="bg-matte border border-zinc-800 text-white font-mono text-sm px-4 py-3 rounded-xl outline-none focus:border-cyan">
+
+            <div class="flex flex-col gap-2 font-mono text-xs max-h-60 overflow-y-auto hide-scrollbar" id="cmdResults">
+                <a href="https://tanzeemrockz.github.io/assetslayer" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
+                    <span>⚡ Launch AssetSlayer v1.0</span>
+                    <span class="text-zinc-500">github.io/assetslayer</span>
+                </a>
+                <a href="./cybershell/" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
+                    <span>💻 Open CyberShell CLI Workstation</span>
+                    <span class="text-zinc-500">/cybershell</span>
+                </a>
+                <a href="https://cyberdrive.vercel.app" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
+                    <span>🏎️ Launch CyberDrive Arcade</span>
+                    <span class="text-zinc-500">cyberdrive.vercel.app</span>
+                </a>
+                <a href="https://shareshed-bice.vercel.app" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
+                    <span>🛠️ Launch ShareShed App</span>
+                    <span class="text-zinc-500">shareshed-bice.vercel.app</span>
+                </a>
+                <a href="https://github.com/tanzeemrockz" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
+                    <span>🐙 GitHub Profile</span>
+                    <span class="text-zinc-500">@tanzeemrockz</span>
+                </a>
+            </div>
+            <div class="text-[10px] font-mono text-zinc-500 text-center">Press ESC or click X to close</div>
+        </div>
+    </div>
+
+    <div id="konamiModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden items-center justify-center p-6">
+        <div class="bg-deep border-2 border-cyan rounded-3xl w-full max-w-md p-8 shadow-[0_0_50px_rgba(0,240,255,0.4)] text-center flex flex-col items-center gap-4">
+            <div class="w-16 h-16 bg-cyan/10 border border-cyan/30 rounded-2xl flex items-center justify-center text-cyan text-3xl mb-2">
+                <i class="fa-solid fa-user-secret"></i>
+            </div>
+            <h3 class="text-2xl font-black text-white font-mono">OPERATOR OVERRIDE</h3>
+            <p class="text-xs text-silver font-mono leading-relaxed">
+                Konami sequence detected. CyberSlayerCorpz studio protocols unlocked. Welcome operator.
+            </p>
+            <button onclick="document.getElementById('konamiModal').classList.add('hidden')" class="anim-btn bg-cyan text-black font-bold text-xs px-8 py-3 rounded-xl mt-4">
+                ACKNOWLEDGE
+            </button>
+        </div>
+    </div>
+
     <script>
-        // Physics Engine & DOM Elements
         const heroTrack = document.getElementById('hero-track');
         const heroContent = document.getElementById('hero-content');
         const heroHex = document.getElementById('hero-hex');
         const projTrack = document.getElementById('projects');
         const projSlider = document.getElementById('proj-slider');
+        const progressBar = document.getElementById('scroll-progress');
+        const aura = document.getElementById('cursor-aura');
 
-        // Scrollytelling rAF Loop
         function onScrollEngine() {
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (totalHeight > 0) {
+                const scrolled = (window.scrollY / totalHeight) * 100;
+                progressBar.style.width = `${scrolled}%`;
+            }
+
             const isDesktop = window.innerWidth >= 768;
             
             if (!isDesktop) {
@@ -369,7 +534,6 @@
                 return;
             }
 
-            // 1. Hero Section Matrix Scrub
             const heroRect = heroTrack.getBoundingClientRect();
             let hProgress = -heroRect.top / (heroRect.height - window.innerHeight);
             hProgress = Math.max(0, Math.min(1, hProgress));
@@ -382,7 +546,6 @@
                 heroHex.style.transform = `translate(-50%, -50%) scale(${1 + (hProgress * 30)}) rotate(${hProgress * 180}deg)`;
             }
 
-            // 2. Project Horizontal Matrix Scrub
             const projRect = projTrack.getBoundingClientRect();
             let pProgress = -projRect.top / (projRect.height - window.innerHeight);
             pProgress = Math.max(0, Math.min(1, pProgress));
@@ -399,7 +562,6 @@
 
         requestAnimationFrame(onScrollEngine);
 
-        // 3. Capabilities HUD Intersection Observer
         const hudText = document.getElementById('hud-text');
         const observerOptions = {
             root: null,
@@ -413,6 +575,7 @@
                     const moduleName = entry.target.getAttribute('data-module');
                     
                     hudText.innerText = moduleName;
+                    playSynthClick(600);
                     
                     anime({
                         targets: hudText,
@@ -445,9 +608,9 @@
 
         document.querySelectorAll('.cap-pill').forEach(pill => capObserver.observe(pill));
 
-        // 4. Button Tactile Micro-Interactions (Anime.js)
         document.querySelectorAll('.anim-btn').forEach(btn => {
             btn.addEventListener('mousedown', () => {
+                playSynthClick(800);
                 anime({ targets: btn, scale: 0.95, duration: 150, easing: 'easeOutQuad' });
             });
             btn.addEventListener('mouseup', () => {
@@ -456,6 +619,200 @@
             btn.addEventListener('mouseleave', () => {
                 anime({ targets: btn, scale: 1, duration: 300, easing: 'easeOutQuad' });
             });
+        });
+
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const count = Math.floor((canvas.width * canvas.height) / 18000);
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                });
+            }
+        }
+
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            if (aura) {
+                aura.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            }
+        });
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#A1A1AA';
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 * (1 - dist / 100)})`;
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+        initCanvas();
+        animateCanvas();
+
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotateX = (-y / rect.height) * 12;
+                const rotateY = (x / rect.width) * 12;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        });
+
+        let audioCtx = null;
+        let sfxEnabled = false;
+
+        function toggleAudioSFX() {
+            sfxEnabled = !sfxEnabled;
+            const btn = document.getElementById('sfxToggleBtn');
+            if (sfxEnabled) {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                btn.innerHTML = '<i class="fa-solid fa-volume-high mr-1 text-cyan"></i> SFX: ON';
+                playSynthClick(1000);
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark mr-1 text-pink"></i> SFX: OFF';
+            }
+        }
+
+        function playSynthClick(freq = 800) {
+            if (!sfxEnabled || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.03);
+        }
+
+        function toggleCmdPalette() {
+            const palette = document.getElementById('cmdPalette');
+            const isHidden = palette.classList.contains('hidden');
+            if (isHidden) {
+                palette.classList.remove('hidden');
+                palette.classList.add('flex');
+                document.getElementById('cmdInput').focus();
+            } else {
+                palette.classList.add('hidden');
+                palette.classList.remove('flex');
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleCmdPalette();
+            }
+            if (e.key === 'Escape') {
+                document.getElementById('cmdPalette').classList.add('hidden');
+            }
+        });
+
+        document.getElementById('cmdInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('#cmdResults a').forEach(link => {
+                const text = link.textContent.toLowerCase();
+                link.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        });
+
+        function filterByTech(tech) {
+            const cards = document.querySelectorAll('.project-card');
+            const capPills = document.querySelectorAll('.cap-pill');
+            const clearBtn = document.getElementById('clearFilterBtn');
+
+            clearBtn.classList.remove('hidden');
+
+            cards.forEach(card => {
+                const hasTech = card.innerHTML.toLowerCase().includes(tech.toLowerCase());
+                card.classList.toggle('dimmed', !hasTech);
+                card.classList.toggle('highlighted', hasTech);
+            });
+
+            capPills.forEach(pill => {
+                const tags = pill.getAttribute('data-tags') || '';
+                const hasTech = tags.toLowerCase().includes(tech.toLowerCase());
+                pill.classList.toggle('dimmed', !hasTech);
+            });
+        }
+
+        function clearTechFilter() {
+            document.querySelectorAll('.project-card, .cap-pill').forEach(el => {
+                el.classList.remove('dimmed', 'highlighted');
+            });
+            document.getElementById('clearFilterBtn').classList.add('hidden');
+        }
+
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    document.body.classList.add('crt-glitch');
+                    setTimeout(() => {
+                        document.body.classList.remove('crt-glitch');
+                        document.getElementById('konamiModal').classList.remove('hidden');
+                        document.getElementById('konamiModal').classList.add('flex');
+                    }, 800);
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
         });
     </script>
 </body>
