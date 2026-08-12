@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberTab | New Tab</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%2300F0FF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23FF007F%22 stroke-width=%2210%22/></g></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deep: '#121215',
+                        matte: '#18181B',
+                        silver: '#A1A1AA',
+                        cyan: '#00F0FF',
+                        pink: '#FF007F',
+                        accent: '#E07B39'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #121215;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #121215; }
+        ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
+
+        .glass-panel {
+            background: rgba(24, 24, 27, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 240, 255, 0.08), transparent 40%);
+            pointer-events: none;
+            z-index: 1;
+            border-radius: inherit;
+        }
+
+        #cursor-aura {
+            position: fixed;
+            top: 0; left: 0;
+            width: 350px; height: 350px;
+            margin-left: -175px; margin-top: -175px;
+            background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, rgba(255,0,127,0.02) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+        }
+
+        .border-beam {
+            position: relative;
+        }
+        .border-beam::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(90deg, transparent, #00F0FF, #FF007F, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .border-beam:hover::after {
+            opacity: 1;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col justify-between selection:bg-cyan selection:text-black">
+
+    <div id="cursor-aura" class="hidden md:block"></div>
+    <canvas id="bg-canvas" class="fixed inset-0 z-0 pointer-events-none w-full h-full opacity-50"></canvas>
+
+    <header class="relative z-20 w-full px-6 py-4 glass-panel border-b border-zinc-800/80">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="500" height="500" rx="100" fill="#18181B"/>
+                    <g stroke-width="16" stroke-linecap="square">
+                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#00F0FF"/>
+                        <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#FF007F" stroke-width="10"/>
+                    </g>
+                </svg>
+                <span class="font-bold text-lg tracking-tight text-white font-sans">Cyber<span class="text-cyan">Tab</span></span>
+            </div>
+
+            <div id="weather-card" class="hidden sm:flex items-center gap-3 bg-deep border border-zinc-800 px-4 py-2 rounded-xl text-xs font-mono">
+                <i id="weather-icon" class="fa-solid fa-cloud-sun text-cyan text-sm"></i>
+                <span id="weather-temp" class="text-white font-bold">--°C</span>
+                <span id="weather-desc" class="text-silver">Loading Weather...</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="sfx-btn" onclick="toggleAudioSFX()" class="flex items-center gap-2 text-xs font-mono text-silver bg-deep border border-zinc-800 px-3 py-2 rounded-xl hover:text-white hover:border-zinc-700 transition">
+                    <i class="fa-solid fa-volume-xmark text-pink" id="sfx-icon"></i> <span id="sfx-text" class="hidden sm:inline">Sound: OFF</span>
+                </button>
+                <button onclick="toggleHelpModal()" class="flex items-center gap-2 text-xs font-mono text-silver bg-deep border border-zinc-800 px-3 py-2 rounded-xl hover:text-white hover:border-zinc-700 transition">
+                    <i class="fa-solid fa-circle-info text-cyan"></i> <span class="hidden sm:inline">Help & Info</span>
+                </button>
+                <button onclick="toggleAiDrawer()" class="flex items-center gap-2 text-xs font-mono bg-cyan text-black font-bold px-4 py-2 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                    <i class="fa-solid fa-sparkles"></i> <span>AI Assistant</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 w-full max-w-5xl mx-auto px-6 py-8 flex flex-col items-center gap-8 my-auto">
+        
+        <div class="text-center flex flex-col items-center">
+            <h1 id="clock-display" class="font-mono text-6xl sm:text-7xl md:text-8xl font-black tracking-tight text-white drop-shadow-[0_0_25px_rgba(0,240,255,0.2)]">00:00:00</h1>
+            <p id="date-display" class="font-mono text-sm sm:text-base text-silver mt-2 font-medium">Loading Date...</p>
+        </div>
+
+        <div class="w-full spotlight-card border-beam bg-matte/90 border border-zinc-800 rounded-2xl p-2 shadow-2xl transition-all focus-within:border-cyan">
+            <form id="search-form" onsubmit="executeSearch(event)" class="flex items-center gap-3 px-3">
+                <i class="fa-solid fa-magnifying-glass text-cyan text-lg"></i>
+                <input type="text" id="search-input" placeholder="Search the web or type a command (/gh, /yt, /duck, /ai, /help)..." autocomplete="off" class="w-full bg-transparent text-white font-mono text-sm sm:text-base py-3 outline-none placeholder:text-zinc-600">
+                <span id="engine-badge" class="hidden sm:inline-block text-[10px] font-mono font-bold text-silver uppercase bg-deep border border-zinc-800 px-2.5 py-1 rounded-md">Google</span>
+            </form>
+        </div>
+
+        <div class="w-full">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-mono text-silver uppercase tracking-wider font-bold"><i class="fa-solid fa-bookmark text-pink mr-2"></i> Quick Bookmarks</span>
+                <span class="text-[10px] font-mono text-zinc-600">Saved locally</span>
+            </div>
+            <div id="bookmarks-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+            </div>
+        </div>
+
+        <div class="w-full spotlight-card border-beam bg-matte border border-zinc-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <img id="music-cover" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80" class="w-16 h-16 rounded-xl object-cover border border-zinc-700 shadow-md">
+                    <div>
+                        <span class="text-[10px] font-mono font-bold uppercase text-pink tracking-wider">Music Stream</span>
+                        <h3 id="music-title" class="font-bold text-white text-base truncate max-w-[200px] sm:max-w-[300px]">CyberSynth Radio</h3>
+                        <p id="music-artist" class="text-xs font-mono text-silver truncate max-w-[200px]">Chill Lofi & Synthwave</p>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-48 h-10 flex items-end gap-1 px-2 py-1 bg-deep rounded-xl border border-zinc-800" id="visualizer-container">
+                    <canvas id="audio-visualizer" class="w-full h-full"></canvas>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="prevTrack()" class="w-10 h-10 rounded-xl bg-deep border border-zinc-800 text-silver hover:text-white hover:border-zinc-700 flex items-center justify-center transition"><i class="fa-solid fa-backward-step"></i></button>
+                    <button id="play-btn" onclick="toggleMusic()" class="w-12 h-12 rounded-xl bg-cyan text-black font-bold flex items-center justify-center hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]"><i class="fa-solid fa-play" id="play-icon"></i></button>
+                    <button onclick="nextTrack()" class="w-10 h-10 rounded-xl bg-deep border border-zinc-800 text-silver hover:text-white hover:border-zinc-700 flex items-center justify-center transition"><i class="fa-solid fa-forward-step"></i></button>
+                </div>
+            </div>
+            <audio id="audio-player" crossorigin="anonymous" src="https://stream.zeno.fm/f3wvbbqmdg8uv"></audio>
+        </div>
+
+    </main>
+
+    <footer class="relative z-20 w-full px-6 py-6 border-t border-zinc-800/80 bg-deep/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-silver">
+            <p>Made with ❤️ by <span class="text-accent font-bold">tanzeemrockz</span></p>
+            <p>Operator: <a href="https://tanzeemrockz.github.io" target="_blank" class="text-white hover:text-cyan hover:underline transition">CyberSlayerCorpz</a></p>
+        </div>
+    </footer>
+
+    <div id="ai-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-deep/95 backdrop-blur-xl border-l border-zinc-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-6 border-b border-zinc-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-3 rounded-full bg-cyan animate-pulse"></div>
+                <h3 class="font-mono font-bold text-white text-base">AI Assistant</h3>
+            </div>
+            <button onclick="toggleAiDrawer()" class="text-silver hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div id="chat-box" class="flex-1 p-6 overflow-y-auto flex flex-col gap-4 font-sans text-sm">
+            <div class="bg-matte p-4 rounded-xl border border-zinc-800 text-silver">
+                <p class="text-white font-medium mb-1">Operational.</p>
+                <p class="text-xs text-zinc-400">Ask questions, request summaries, or troubleshoot code directly. To enable live answers, enter your Groq API key in Help & Info settings.</p>
+            </div>
+        </div>
+
+        <div class="px-6 py-3 border-t border-zinc-800/50 flex items-center gap-2 overflow-x-auto hide-scrollbar">
+            <button onclick="quickPrompt('Summarize this concept in simple terms')" class="text-[10px] font-mono text-zinc-400 bg-matte border border-zinc-800 px-3 py-1.5 rounded-full whitespace-nowrap hover:border-cyan hover:text-white transition">⚡ Summarize</button>
+            <button onclick="quickPrompt('Brainstorm 3 creative ideas for a web project')" class="text-[10px] font-mono text-zinc-400 bg-matte border border-zinc-800 px-3 py-1.5 rounded-full whitespace-nowrap hover:border-cyan hover:text-white transition">💡 Brainstorm</button>
+            <a href="https://duck.ai" target="_blank" class="text-[10px] font-mono text-cyan bg-cyan/10 border border-cyan/30 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-cyan hover:text-black transition">🦆 Open Duck.ai</a>
+        </div>
+
+        <div class="p-6 border-t border-zinc-800 bg-matte">
+            <form onsubmit="sendAiMessage(event)" class="flex items-center gap-2">
+                <input type="text" id="ai-input" placeholder="Ask AI Assistant..." class="w-full bg-deep border border-zinc-800 text-white font-mono text-xs p-3 rounded-xl outline-none focus:border-cyan">
+                <button type="submit" class="bg-cyan text-black px-4 py-3 rounded-xl font-bold hover:bg-white transition"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <div id="help-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-6">
+        <div class="bg-deep border border-zinc-800 rounded-3xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-circle-info text-cyan text-xl"></i>
+                    <h3 class="font-mono font-bold text-white text-lg">System Specs & Settings</h3>
+                </div>
+                <button onclick="toggleHelpModal()" class="text-silver hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="space-y-6 text-xs font-mono">
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3 text-cyan">Search Engine Preference</h4>
+                    <select id="engine-select" onchange="changeSearchEngine(this.value)" class="w-full bg-matte border border-zinc-800 text-white p-3 rounded-xl outline-none focus:border-cyan">
+                        <option value="google">Google Search</option>
+                        <option value="duckduckgo">DuckDuckGo (Privacy)</option>
+                        <option value="bing">Microsoft Bing</option>
+                        <option value="brave">Brave Search</option>
+                    </select>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3 text-cyan">Groq AI API Key (Bring Your Own Key)</h4>
+                    <input type="password" id="groq-key-input" placeholder="Paste Groq API Key (gsk_...)" onchange="saveGroqKey(this.value)" class="w-full bg-matte border border-zinc-800 text-white p-3 rounded-xl outline-none focus:border-cyan">
+                    <p class="text-[10px] text-zinc-500 mt-1">Key is stored purely in your browser local storage.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3 text-pink">Search Shortcuts Directory</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-zinc-400">
+                        <div class="bg-matte p-2.5 rounded-lg border border-zinc-800"><span class="text-cyan font-bold">/gh [query]</span> - Search GitHub</div>
+                        <div class="bg-matte p-2.5 rounded-lg border border-zinc-800"><span class="text-cyan font-bold">/yt [query]</span> - Search YouTube</div>
+                        <div class="bg-matte p-2.5 rounded-lg border border-zinc-800"><span class="text-cyan font-bold">/duck</span> - Open Duck.ai</div>
+                        <div class="bg-matte p-2.5 rounded-lg border border-zinc-800"><span class="text-cyan font-bold">/ai [prompt]</span> - Open AI Assistant</div>
+                        <div class="bg-matte p-2.5 rounded-lg border border-zinc-800"><span class="text-cyan font-bold">/help</span> - Open this Menu</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3 text-cyan">Active Data Connections</h4>
+                    <ul class="space-y-2 text-zinc-400">
+                        <li>• <strong class="text-white">Weather:</strong> Open-Meteo Client API (Geo-Location Based)</li>
+                        <li>• <strong class="text-white">Favicons:</strong> Google Public Favicon API</li>
+                        <li>• <strong class="text-white">Music:</strong> Zeno / Lofi Live Stream + HTML5 Web Audio Visualizer</li>
+                        <li>• <strong class="text-white">AI Engine:</strong> Groq Llama 3 API (Direct Client-Side Fetch)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bookmark-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-6">
+        <div class="bg-deep border border-zinc-800 rounded-3xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4">
+            <h3 class="font-mono font-bold text-white text-base">Add Quick Bookmark</h3>
+            <input type="text" id="bm-title" placeholder="Website Name (e.g. GitHub)" class="bg-matte border border-zinc-800 text-white font-mono text-xs p-3 rounded-xl outline-none focus:border-cyan">
+            <input type="text" id="bm-url" placeholder="Website URL (e.g. github.com)" class="bg-matte border border-zinc-800 text-white font-mono text-xs p-3 rounded-xl outline-none focus:border-cyan">
+            <div class="flex items-center justify-end gap-2 mt-2">
+                <button onclick="toggleBookmarkModal()" class="text-xs font-mono text-silver px-4 py-2 hover:text-white">Cancel</button>
+                <button onclick="saveBookmark()" class="text-xs font-mono bg-cyan text-black font-bold px-4 py-2 rounded-xl hover:bg-white transition">Save Bookmark</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let defaultBookmarks = [
+            { title: 'GitHub', url: 'https://github.com' },
+            { title: 'YouTube', url: 'https://youtube.com' },
+            { title: 'Instagram', url: 'https://instagram.com' },
+            { title: 'Gmail', url: 'https://mail.google.com' },
+            { title: 'Vercel', url: 'https://vercel.com' }
+        ];
+
+        let musicTracks = [
+            { title: 'CyberSynth Radio', artist: 'Chill Lofi & Synthwave', stream: 'https://stream.zeno.fm/f3wvbbqmdg8uv', cover: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80' },
+            { title: 'Nightcity Beats', artist: 'Retrowave Instrumental', stream: 'https://stream.zeno.fm/0r0xa792kwzuv', cover: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=150&auto=format&fit=crop&q=80' }
+        ];
+        let currentTrackIndex = 0;
+
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock-display').innerText = `${hours}:${minutes}:${seconds}`;
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date-display').innerText = now.toLocaleDateString('en-US', options);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const count = Math.floor((canvas.width * canvas.height) / 15000);
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    size: Math.random() * 2 + 1
+                });
+            }
+        }
+
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => {
+            const aura = document.getElementById('cursor-aura');
+            if (aura) aura.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        });
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#A1A1AA';
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 90) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.12 * (1 - dist / 90)})`;
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+        initCanvas();
+        animateCanvas();
+
+        function renderBookmarks() {
+            const grid = document.getElementById('bookmarks-grid');
+            const saved = JSON.parse(localStorage.getItem('cybertab_bookmarks')) || defaultBookmarks;
+            grid.innerHTML = '';
+
+            saved.forEach((bm, index) => {
+                const domain = bm.url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+                const iconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+                
+                const card = document.createElement('a');
+                card.href = bm.url.startsWith('http') ? bm.url : `https://${bm.url}`;
+                card.className = "tilt-card spotlight-card border-beam bg-matte border border-zinc-800 p-4 rounded-xl flex flex-col items-center gap-2 group relative shadow-lg";
+                
+                card.innerHTML = `
+                    <button onclick="deleteBookmark(event, ${index})" class="absolute top-2 right-2 text-zinc-600 hover:text-pink text-xs opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-xmark"></i></button>
+                    <img src="${iconUrl}" class="w-8 h-8 rounded-md object-contain group-hover:scale-110 transition duration-300" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1006/1006771.png'">
+                    <span class="text-xs font-mono text-zinc-300 group-hover:text-cyan truncate max-w-full font-medium">${bm.title}</span>
+                `;
+                grid.appendChild(card);
+            });
+
+            const addTile = document.createElement('button');
+            addTile.onclick = toggleBookmarkModal;
+            addTile.className = "tilt-card bg-deep border border-dashed border-zinc-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-cyan text-zinc-500 hover:text-cyan transition shadow-lg min-h-[90px]";
+            addTile.innerHTML = `
+                <i class="fa-solid fa-plus text-lg"></i>
+                <span class="text-xs font-mono">Add Bookmark</span>
+            `;
+            grid.appendChild(addTile);
+
+            setupSpotlightAndTilt();
+        }
+
+        function toggleBookmarkModal() {
+            const modal = document.getElementById('bookmark-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function saveBookmark() {
+            const title = document.getElementById('bm-title').value.trim();
+            const url = document.getElementById('bm-url').value.trim();
+            if (!title || !url) return;
+
+            const saved = JSON.parse(localStorage.getItem('cybertab_bookmarks')) || defaultBookmarks;
+            saved.push({ title, url });
+            localStorage.setItem('cybertab_bookmarks', JSON.stringify(saved));
+            
+            document.getElementById('bm-title').value = '';
+            document.getElementById('bm-url').value = '';
+            toggleBookmarkModal();
+            renderBookmarks();
+        }
+
+        function deleteBookmark(e, index) {
+            e.preventDefault();
+            e.stopPropagation();
+            const saved = JSON.parse(localStorage.getItem('cybertab_bookmarks')) || defaultBookmarks;
+            saved.splice(index, 1);
+            localStorage.setItem('cybertab_bookmarks', JSON.stringify(saved));
+            renderBookmarks();
+        }
+
+        function executeSearch(e) {
+            e.preventDefault();
+            const query = document.getElementById('search-input').value.trim();
+            if (!query) return;
+
+            if (query.startsWith('/gh ')) {
+                window.location.href = `https://github.com/search?q=${encodeURIComponent(query.replace('/gh ', ''))}`;
+                return;
+            }
+            if (query.startsWith('/yt ')) {
+                window.location.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query.replace('/yt ', ''))}`;
+                return;
+            }
+            if (query === '/duck') {
+                window.open('https://duck.ai', '_blank');
+                return;
+            }
+            if (query.startsWith('/ai ')) {
+                toggleAiDrawer();
+                document.getElementById('ai-input').value = query.replace('/ai ', '');
+                return;
+            }
+            if (query === '/help') {
+                toggleHelpModal();
+                return;
+            }
+
+            const engine = localStorage.getItem('cybertab_engine') || 'google';
+            let searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+
+            if (engine === 'duckduckgo') searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+            if (engine === 'bing') searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+            if (engine === 'brave') searchUrl = `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
+
+            window.location.href = searchUrl;
+        }
+
+        function changeSearchEngine(val) {
+            localStorage.setItem('cybertab_engine', val);
+            document.getElementById('engine-badge').innerText = val.toUpperCase();
+        }
+
+        function loadWeather() {
+            if (!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                try {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                    const data = await res.json();
+                    if (data.current_weather) {
+                        document.getElementById('weather-temp').innerText = `${Math.round(data.current_weather.temperature)}°C`;
+                        document.getElementById('weather-desc').innerText = `Wind: ${data.current_weather.windspeed} km/h`;
+                    }
+                } catch (err) {}
+            });
+        }
+
+        let audioCtx, analyser, dataArray, source;
+        const player = document.getElementById('audio-player');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                source = audioCtx.createMediaElementSource(player);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                analyser.fftSize = 64;
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                drawVisualizer();
+            }
+
+            if (isPlaying) {
+                player.pause();
+                document.getElementById('play-icon').className = 'fa-solid fa-play';
+            } else {
+                player.play();
+                document.getElementById('play-icon').className = 'fa-solid fa-pause';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
+            loadTrack(currentTrackIndex);
+        }
+
+        function prevTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
+            loadTrack(currentTrackIndex);
+        }
+
+        function loadTrack(index) {
+            const track = musicTracks[index];
+            document.getElementById('music-title').innerText = track.title;
+            document.getElementById('music-artist').innerText = track.artist;
+            document.getElementById('music-cover').src = track.cover;
+            player.src = track.stream;
+            if (isPlaying) player.play();
+        }
+
+        function drawVisualizer() {
+            const visCanvas = document.getElementById('audio-visualizer');
+            const visCtx = visCanvas.getContext('2d');
+            visCanvas.width = visCanvas.offsetWidth;
+            visCanvas.height = visCanvas.offsetHeight;
+
+            function render() {
+                requestAnimationFrame(render);
+                if (!analyser) return;
+                analyser.getByteFrequencyData(dataArray);
+
+                visCtx.clearRect(0, 0, visCanvas.width, visCanvas.height);
+                const barWidth = (visCanvas.width / dataArray.length) * 1.5;
+                let x = 0;
+
+                for (let i = 0; i < dataArray.length; i++) {
+                    const barHeight = (dataArray[i] / 255) * visCanvas.height;
+                    visCtx.fillStyle = '#00F0FF';
+                    visCtx.fillRect(x, visCanvas.height - barHeight, barWidth - 1, barHeight);
+                    x += barWidth;
+                }
+            }
+            render();
+        }
+
+        let sfxActive = false;
+        let sfxCtx;
+        function toggleAudioSFX() {
+            sfxActive = !sfxActive;
+            const text = document.getElementById('sfx-text');
+            const icon = document.getElementById('sfx-icon');
+            if (sfxActive) {
+                if (!sfxCtx) sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
+                text.innerText = 'Sound: ON';
+                icon.className = 'fa-solid fa-volume-high text-cyan';
+            } else {
+                text.innerText = 'Sound: OFF';
+                icon.className = 'fa-solid fa-volume-xmark text-pink';
+            }
+        }
+
+        function playClickSFX() {
+            if (!sfxActive || !sfxCtx) return;
+            const osc = sfxCtx.createOscillator();
+            const gain = sfxCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, sfxCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, sfxCtx.currentTime + 0.03);
+            gain.gain.setValueAtTime(0.05, sfxCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime + 0.03);
+            osc.connect(gain);
+            gain.connect(sfxCtx.destination);
+            osc.start();
+            osc.stop(sfxCtx.currentTime + 0.03);
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('button, a')) playClickSFX();
+        });
+
+        function toggleAiDrawer() {
+            const drawer = document.getElementById('ai-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function toggleHelpModal() {
+            const modal = document.getElementById('help-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function saveGroqKey(val) {
+            localStorage.setItem('cybertab_groq_key', val.trim());
+        }
+
+        function quickPrompt(txt) {
+            document.getElementById('ai-input').value = txt;
+        }
+
+        async function sendAiMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input');
+            const prompt = input.value.trim();
+            if (!prompt) return;
+
+            const chatBox = document.getElementById('chat-box');
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = "bg-deep p-3 rounded-xl border border-zinc-800 text-white font-mono text-xs self-end max-w-[85%]";
+            userMsg.innerText = prompt;
+            chatBox.appendChild(userMsg);
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const apiKey = localStorage.getItem('cybertab_groq_key');
+            
+            const aiMsg = document.createElement('div');
+            aiMsg.className = "bg-matte p-3 rounded-xl border border-zinc-800 text-silver font-sans text-xs self-start max-w-[85%]";
+            aiMsg.innerText = "Processing...";
+            chatBox.appendChild(aiMsg);
+
+            if (!apiKey) {
+                aiMsg.innerText = "Please enter your Groq API Key in Help & Info settings to activate AI responses.";
+                return;
+            }
+
+            try {
+                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama-3.3-70b-versatile',
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+                const data = await res.json();
+                if (data.choices && data.choices[0]) {
+                    aiMsg.innerText = data.choices[0].message.content;
+                } else {
+                    aiMsg.innerText = "Error fetching response from Groq API.";
+                }
+            } catch (err) {
+                aiMsg.innerText = "Connection failed. Verify API key or network.";
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function setupSpotlightAndTilt() {
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    card.style.transform = `perspective(1000px) rotateX(${(-y / rect.height) * 8}deg) rotateY(${(x / rect.width) * 8}deg)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                });
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderBookmarks();
+            loadWeather();
+            
+            const savedEngine = localStorage.getItem('cybertab_engine') || 'google';
+            document.getElementById('engine-select').value = savedEngine;
+            document.getElementById('engine-badge').innerText = savedEngine.toUpperCase();
+
+            const savedKey = localStorage.getItem('cybertab_groq_key') || '';
+            document.getElementById('groq-key-input').value = savedKey;
+        });
+    </script>
+</body>
+</html>
