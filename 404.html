@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Route Not Located | CyberSlayerCorpz</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" />
+
+  <!-- Fonts: Syne, Plus Jakarta Sans, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            oatmeal: '#ECE7E1',
+            oatmealDark: '#E2DCD4',
+            ink: '#141312',
+            inkMuted: '#585550',
+            hairline: '#D5CEC4',
+            surfaceCard: '#E7E2DA'
+          },
+          fontFamily: {
+            display: ['"Syne"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Theme Script (Synced with Landing Page) -->
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <style>
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      z-index: 999;
+    }
+  </style>
+</head>
+<body class="bg-oatmeal text-ink dark:bg-[#111111] dark:text-[#F4F4F5] font-sans antialiased selection:bg-ink selection:text-oatmeal dark:selection:bg-white dark:selection:text-black min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+  <!-- Glassmorphic Header -->
+  <header class="sticky top-4 z-50 flex justify-center px-4">
+    <nav class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-sm rounded-full px-5 py-2.5 flex items-center gap-5 sm:gap-8 transition duration-300">
+      
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" alt="CyberSlayerCorpz Logo" class="w-6 h-6 rounded-md" />
+        <span class="font-display font-bold text-sm tracking-tight text-ink dark:text-white">CyberSlayerCorpz</span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <button id="themeToggle" aria-label="Toggle Theme" class="p-2 text-inkMuted dark:text-zinc-400 hover:text-ink dark:hover:text-white transition rounded-full">
+          <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <a href="index.html" class="bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold px-4 py-2 rounded-full tracking-tight transition duration-200 shadow-sm">
+          Return Home
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main 404 Area -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 w-full text-center flex flex-col items-center">
+    
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surfaceCard dark:bg-zinc-900 border border-hairline dark:border-zinc-800 text-xs font-semibold text-inkMuted dark:text-zinc-400 mb-6">
+      <span class="w-2 h-2 rounded-full bg-red-500"></span>
+      <span class="font-mono text-[11px] uppercase tracking-wider text-ink dark:text-zinc-200">HTTP Status 404</span>
+    </div>
+
+    <h1 class="font-display font-extrabold text-7xl sm:text-9xl lg:text-[11rem] tracking-tight leading-none text-ink dark:text-white select-none">
+      404
+    </h1>
+
+    <h2 class="font-display font-bold text-2xl sm:text-3xl text-ink dark:text-white mt-4 mb-3 tracking-tight">
+      Route Not Located
+    </h2>
+
+    <p class="text-sm sm:text-base text-inkMuted dark:text-zinc-400 max-w-md leading-relaxed mb-8">
+      The requested endpoint or asset does not exist on this domain. Check the URL address or return to the main deployment overview.
+    </p>
+
+    <!-- Quick Navigation Actions -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mb-16">
+      <a href="index.html" class="bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold px-6 py-3 rounded-full tracking-tight transition duration-200 shadow-sm">
+        Return to Homepage
+      </a>
+      <a href="index.html#deployments" class="text-xs font-semibold text-ink dark:text-zinc-200 hover:text-inkMuted dark:hover:text-white tracking-tight px-5 py-3 border border-hairline dark:border-zinc-800 rounded-full bg-surfaceCard/40 dark:bg-zinc-900/40">
+        View Live Demos
+      </a>
+      <a href="index.html#contact" class="text-xs font-semibold text-ink dark:text-zinc-200 hover:text-inkMuted dark:hover:text-white tracking-tight px-5 py-3 border border-hairline dark:border-zinc-800 rounded-full bg-surfaceCard/40 dark:bg-zinc-900/40">
+        Contact Desk
+      </a>
+    </div>
+
+    <!-- Active Service Channels Box -->
+    <div class="w-full max-w-xl bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 text-left">
+      <div class="text-xs font-semibold text-ink dark:text-white mb-2">Need immediate assistance?</div>
+      <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed mb-4">
+        Direct communication channels remain monitored for client requirements and operational inquiries:
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <a href="mailto:contact@cyberslayercorpz.dev" class="p-3 bg-white dark:bg-zinc-800 rounded-xl border border-hairline dark:border-zinc-700 hover:border-ink dark:hover:border-zinc-500 transition block">
+          <div class="text-[10px] text-inkMuted dark:text-zinc-400 font-mono">EMAIL</div>
+          <div class="font-semibold text-ink dark:text-white mt-0.5 truncate">contact@cyberslayercorpz.dev</div>
+        </a>
+        <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="p-3 bg-white dark:bg-zinc-800 rounded-xl border border-hairline dark:border-zinc-700 hover:border-ink dark:hover:border-zinc-500 transition block">
+          <div class="text-[10px] text-inkMuted dark:text-zinc-400 font-mono">INSTAGRAM</div>
+          <div class="font-semibold text-ink dark:text-white mt-0.5">@cyberslayercorpz ↗</div>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Minimalist Footer -->
+  <footer class="border-t border-hairline dark:border-zinc-800 py-8 bg-oatmealDark/40 dark:bg-zinc-950/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-xs text-inkMuted dark:text-zinc-500 gap-4">
+      <div class="flex items-center gap-3">
+        <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" alt="CyberSlayerCorpz Logo" class="w-5 h-5 rounded-sm" />
+        <span class="font-display font-bold text-ink dark:text-white text-sm">CyberSlayerCorpz</span>
+      </div>
+
+      <div class="text-xs">
+        Fast-Turnaround Digital Engineering
+      </div>
+    </div>
+  </footer>
+
+  <!-- Theme Toggle Controller -->
+  <script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    themeToggleBtn.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  </script>
+
+</body>
+</html>
