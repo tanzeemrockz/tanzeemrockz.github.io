@@ -1,847 +1,725 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberSlayerCorpz | Indie Software Studio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberSlayerCorpz — High-Speed Web Systems & Digital Lookbooks</title>
 
-    <!-- Exact Preserved Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Restored Original Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <!-- Fonts: Syne, Plus Jakarta Sans, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        deep: '#0F0F12',
-                        matte: '#16161A',
-                        card: '#1B1B22',
-                        silver: '#9E9EA8',
-                        cyan: '#00F0FF',
-                        pink: '#FF007F',
-                        accent: '#E07B39',
-                        sig: 'rgb(211,84,0)'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace']
-                    }
-                }
-            }
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            oatmeal: '#ECE7E1',
+            oatmealDark: '#E2DCD4',
+            ink: '#141312',
+            inkMuted: '#585550',
+            hairline: '#D5CEC4',
+            surfaceCard: '#E7E2DA'
+          },
+          fontFamily: {
+            display: ['"Syne"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          }
         }
-    </script>
+      }
+    }
+  </script>
 
-    <style>
-        body {
-            background-color: #0F0F12;
-            color: #FFFFFF;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-        ::-webkit-scrollbar { width: 7px; }
-        ::-webkit-scrollbar-track { background: #0F0F12; }
-        ::-webkit-scrollbar-thumb { background: #26262F; border-radius: 4px; border: 1px solid #16161A; }
-        ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
+  <!-- Dark Mode Persistence Script -->
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
 
-        .glass-nav {
-            background: rgba(15, 15, 18, 0.82);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .dimmed {
-            opacity: 0.18 !important;
-            filter: grayscale(80%);
-            transition: all 0.3s ease-out;
-        }
-        .highlighted {
-            opacity: 1 !important;
-            border-color: #00F0FF !important;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.22) !important;
-            transition: all 0.3s ease-out;
-        }
-
-        .tilt-card {
-            transform-style: preserve-3d;
-            will-change: transform;
-            transition: transform 0.12s ease-out, border-color 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .spotlight-card {
-            position: relative;
-            overflow: hidden;
-        }
-        .spotlight-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(550px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 240, 255, 0.08), transparent 45%);
-            pointer-events: none;
-            z-index: 1;
-            border-radius: inherit;
-        }
-
-        #cursor-aura {
-            position: fixed;
-            top: 0; left: 0;
-            width: 300px; height: 300px;
-            margin-left: -150px; margin-top: -150px;
-            background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, rgba(255,0,127,0.02) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            will-change: transform;
-        }
-
-        .border-beam {
-            position: relative;
-        }
-        .border-beam::after {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(90deg, transparent, #00F0FF, #FF007F, transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-        .border-beam:hover::after {
-            opacity: 1;
-        }
-    </style>
+  <style>
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      z-index: 999;
+    }
+  </style>
 </head>
-<body class="antialiased flex flex-col min-h-screen selection:bg-cyan selection:text-black">
+<body class="bg-oatmeal text-ink dark:bg-[#111111] dark:text-[#F4F4F5] font-sans antialiased selection:bg-ink selection:text-oatmeal dark:selection:bg-white dark:selection:text-black min-h-screen transition-colors duration-200">
 
-    <div id="cursor-aura" class="hidden md:block"></div>
+  <!-- Glassmorphic Sticky Header -->
+  <header class="sticky top-4 z-50 flex justify-center px-4 mb-6">
+    <nav class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-sm rounded-full px-5 py-2.5 flex items-center gap-5 sm:gap-8 transition duration-300">
+      
+      <a href="#" class="flex items-center gap-3">
+        <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" alt="CyberSlayerCorpz Logo" class="w-6 h-6 rounded-md" />
+        <span class="font-display font-bold text-sm tracking-tight text-ink dark:text-white">CyberSlayerCorpz</span>
+      </a>
 
-    <!-- Scroll Progress Indicator -->
-    <div class="fixed top-0 left-0 w-full h-[2px] bg-deep z-50 pointer-events-none">
-        <div id="scroll-progress" class="h-full bg-gradient-to-r from-cyan via-pink to-accent w-0 transition-all duration-75"></div>
-    </div>
+      <div class="hidden md:flex items-center gap-6 text-[13px] font-medium text-inkMuted dark:text-zinc-400 tracking-tight">
+        <a href="#workflow" class="hover:text-ink dark:hover:text-white transition">Workflow</a>
+        <a href="#capabilities" class="hover:text-ink dark:hover:text-white transition">Capabilities</a>
+        <a href="#specs" class="hover:text-ink dark:hover:text-white transition">Specs</a>
+        <a href="#deployments" class="hover:text-ink dark:hover:text-white transition">Deployments</a>
+        <a href="#timeline" class="hover:text-ink dark:hover:text-white transition">Timeline</a>
+        <a href="#pricing" class="hover:text-ink dark:hover:text-white transition">Pricing</a>
+      </div>
 
-    <!-- Header Navigation -->
-    <nav class="fixed w-full top-0 z-50 glass-nav">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-3.5 group">
-                <svg id="nav-logo" class="w-8 h-8 transition-transform duration-500 group-hover:rotate-90" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="500" height="500" rx="100" fill="#16161A"/>
-                    <g stroke-width="16" stroke-linecap="square">
-                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/>
-                        <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#00F0FF" stroke-width="10"/>
-                    </g>
-                </svg>
-                <span class="font-extrabold text-lg tracking-tight text-white">CyberSlayer<span class="text-silver">Corpz</span></span>
-            </a>
+      <div class="flex items-center gap-3">
+        <!-- Dark Mode Toggle Button -->
+        <button id="themeToggle" aria-label="Toggle Theme" class="p-2 text-inkMuted dark:text-zinc-400 hover:text-ink dark:hover:text-white transition rounded-full">
+          <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
 
-            <div class="hidden md:flex items-center gap-7">
-                <a href="#projects" class="text-sm font-medium text-silver hover:text-white transition">Projects</a>
-                <a href="#capabilities" class="text-sm font-medium text-silver hover:text-white transition">Capabilities</a>
-                <a href="#contact" class="text-sm font-medium text-silver hover:text-white transition">Contact</a>
-
-                <button onclick="toggleCmdPalette()" class="anim-btn flex items-center gap-2 text-xs font-mono bg-matte border border-zinc-800 text-silver px-3 py-1.5 rounded-xl hover:border-zinc-700 hover:text-white transition shadow-sm">
-                    <i class="fa-solid fa-terminal text-cyan"></i>
-                    <span>Cmd+K</span>
-                </button>
-
-                <a href="https://github.com/tanzeemrockz" target="_blank" class="text-silver hover:text-white text-lg transition">
-                    <i class="fa-brands fa-github"></i>
-                </a>
-                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="anim-btn flex items-center gap-2 text-xs font-bold bg-white text-black px-4 py-2 rounded-xl hover:bg-gray-200 transition shadow-sm">
-                    <i class="fa-brands fa-instagram text-sm"></i> Instagram
-                </a>
-            </div>
-
-            <!-- Mobile Hamburger Toggle -->
-            <div class="md:hidden flex items-center gap-3">
-                <button onclick="toggleCmdPalette()" class="text-silver hover:text-white text-base p-2"><i class="fa-solid fa-terminal"></i></button>
-                <button onclick="toggleMobileNav()" class="text-silver hover:text-white text-2xl p-2 focus:outline-none"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
-
-        <!-- Mobile Drawer Menu -->
-        <div id="mobileMenu" class="hidden md:hidden px-6 py-5 bg-deep/95 border-b border-zinc-800 flex flex-col gap-4 font-mono text-sm">
-            <a href="#projects" onclick="toggleMobileNav()" class="text-silver hover:text-white py-1">Projects</a>
-            <a href="#capabilities" onclick="toggleMobileNav()" class="text-silver hover:text-white py-1">Capabilities</a>
-            <a href="#contact" onclick="toggleMobileNav()" class="text-silver hover:text-white py-1">Contact</a>
-            <a href="https://github.com/tanzeemrockz" target="_blank" class="text-cyan py-1 flex items-center gap-2"><i class="fa-brands fa-github"></i> GitHub Profile</a>
-        </div>
+        <a href="#contact" class="bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold px-4 py-2 rounded-full tracking-tight transition duration-200 shadow-sm">
+          Start Project
+        </a>
+      </div>
     </nav>
+  </header>
 
-    <!-- Hero Section -->
-    <section id="hero-track" class="md:h-[180vh] relative w-full">
-        <div class="md:sticky top-0 h-screen flex flex-col justify-center px-6 overflow-hidden relative">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
 
-            <canvas id="hero-canvas" class="absolute inset-0 z-0 pointer-events-none w-full h-full opacity-35"></canvas>
+    <!-- Centered Hero Section -->
+    <section class="max-w-4xl mx-auto text-center flex flex-col items-center mb-32 space-y-7">
+      
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surfaceCard dark:bg-zinc-900 border border-hairline dark:border-zinc-800 text-xs font-semibold text-inkMuted dark:text-zinc-400">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Production Capacity Active — 48-Hour Turnaround
+      </div>
 
-            <div id="hero-hex" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 opacity-10 pointer-events-none w-32 h-32 hidden md:block">
-                <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-                    <g stroke-width="8" stroke-linecap="square">
-                        <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#00F0FF"/>
-                        <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="4"/>
-                    </g>
-                </svg>
-            </div>
+      <h1 class="font-display font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-[5.2rem] tracking-tight leading-[0.94] text-ink dark:text-white text-center">
+        CyberSlayerCorpz
+      </h1>
 
-            <div id="hero-content" class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-start pt-20 md:pt-0">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-matte text-xs font-semibold tracking-wider text-silver mb-8 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span> INDIE SOFTWARE STUDIO
-                </div>
+      <p class="text-base sm:text-xl text-inkMuted dark:text-zinc-400 max-w-2xl leading-relaxed text-center">
+        We build high-performance mobile websites, digital lookbooks, and direct ordering systems for businesses ready to turn search traffic into revenue.
+      </p>
 
-                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-tight mb-6 max-w-4xl">
-                    We build modern,<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-pink to-accent">high-impact software.</span>
-                </h1>
+      <div class="w-full border-t border-hairline dark:border-zinc-800 pt-7 flex flex-wrap justify-center items-center gap-4">
+        <a href="#contact" class="bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold px-7 py-3.5 rounded-full tracking-tight transition duration-200">
+          Initiate Build
+        </a>
+        <a href="#deployments" class="text-xs font-semibold text-ink dark:text-zinc-200 hover:text-inkMuted dark:hover:text-white tracking-tight px-5 py-3.5 border border-hairline dark:border-zinc-800 rounded-full bg-surfaceCard/40 dark:bg-zinc-900/40">
+          View Live Demos ↓
+        </a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfMF3Inm3AfIOPMHFS1sq2yTuSkACQ6QweBD9RDcf93SqHGeg/viewform?usp=header" target="_blank" class="text-xs font-semibold text-ink dark:text-zinc-200 hover:text-inkMuted dark:hover:text-white tracking-tight px-5 py-3.5 border border-hairline dark:border-zinc-800 rounded-full bg-surfaceCard/40 dark:bg-zinc-900/40 inline-flex items-center gap-1.5">
+          <span>Client Onboarding Form</span>
+          <span>↗</span>
+        </a>
+      </div>
 
-                <p class="text-lg md:text-xl text-silver max-w-2xl font-normal leading-relaxed mb-10">
-                    From web platforms to next-gen utilities, we create fast, scalable, and accessible digital experiences designed to empower users and communities.
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                    <a href="#projects" class="anim-btn inline-flex justify-center items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-gray-200 transition shadow-lg">
-                        View Flagship Builds <i class="fa-solid fa-arrow-down text-sm"></i>
-                    </a>
-                    <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn inline-flex justify-center items-center gap-2 border border-zinc-800 bg-matte text-white font-semibold px-8 py-4 rounded-xl hover:border-zinc-700 transition shadow-sm">
-                        <i class="fa-brands fa-github text-lg"></i> GitHub Profile
-                    </a>
-                </div>
-            </div>
-        </div>
     </section>
 
-    <!-- Capabilities Section -->
-    <section id="capabilities" class="relative w-full max-w-6xl mx-auto px-6 py-24 md:py-0">
-        <div class="flex flex-col md:flex-row md:gap-24 relative">
-
-            <div class="md:w-5/12 md:sticky top-0 md:h-screen flex flex-col justify-center py-12 md:py-0 z-10">
-                <h2 class="text-3xl md:text-5xl font-black mb-6">Core Stack &<br>Capabilities</h2>
-                <p class="text-silver mb-8 text-lg font-normal leading-relaxed">We build robust software and fluid interfaces using modern, battle-tested technologies.</p>
-
-                <div class="p-8 border border-zinc-800 bg-matte/90 backdrop-blur-md rounded-3xl shadow-2xl relative overflow-hidden spotlight-card border-beam">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan via-pink to-accent"></div>
-                    <p class="text-[11px] text-zinc-400 mb-3 uppercase tracking-wider font-semibold flex items-center gap-2 font-mono">
-                        <span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span> Active Focus
-                    </p>
-                    <p id="hud-text" class="text-2xl font-bold text-white transition-colors duration-300">Hover a skill card...</p>
-                </div>
-            </div>
-
-            <div class="md:w-7/12 md:py-[35vh] flex flex-col gap-6 md:gap-24 pb-24 z-0">
-                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl cursor-default" data-module="Interactive Web Shells" data-tags="Vanilla JS, CLI">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-terminal text-2xl text-cyan"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">CLI & Web Terminals</h3><p class="text-sm text-zinc-400">Unix-style interactive shells, custom block cursors, and command parsing engines.</p></div>
-                </div>
-
-                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl cursor-default" data-module="Canvas 2D & Audio Synthesis" data-tags="Canvas 2D, Web Audio API">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-gamepad text-2xl text-cyan"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Canvas & Audio Synthesizers</h3><p class="text-sm text-zinc-400">Pure 2D/3D projection engines, procedural rendering, and Web Audio nodes.</p></div>
-                </div>
-
-                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl cursor-default" data-module="Progressive Web Applications" data-tags="PWA, Tailwind CSS">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-mobile-screen-button text-2xl text-silver"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Web & Mobile Apps</h3><p class="text-sm text-zinc-400">Cross-platform digital experiences with offline support and responsive design.</p></div>
-                </div>
-
-                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl cursor-default" data-module="Hardware-Accelerated UI Motion" data-tags="Anime.js, Tailwind CSS">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-2xl text-pink"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Fluid UI Animations</h3><p class="text-sm text-zinc-400">Micro-interactions and fluid transitions built with Anime.js and modern CSS.</p></div>
-                </div>
-
-                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl cursor-default" data-module="Supabase Realtime Databases" data-tags="Supabase">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-solid fa-database text-2xl text-silver"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Supabase / PostgreSQL</h3><p class="text-sm text-zinc-400">Scalable relational schemas, row-level authentication, and real-time events.</p></div>
-                </div>
-
-                <div class="cap-pill tilt-card spotlight-card border-beam p-8 border border-zinc-800 bg-matte rounded-3xl flex items-center gap-6 shadow-xl cursor-default" data-module="Modern Design Systems" data-tags="Tailwind CSS">
-                    <div class="w-14 h-14 bg-deep rounded-2xl flex items-center justify-center border border-zinc-800 shrink-0"><i class="fa-brands fa-css3-alt text-2xl text-silver"></i></div>
-                    <div><h3 class="font-bold text-xl mb-1">Modern UI Design</h3><p class="text-sm text-zinc-400">Engineered with Tailwind CSS design tokens for accessibility and speed.</p></div>
-                </div>
-            </div>
+    <!-- Workflow Section with scroll-mt-28 -->
+    <section id="workflow" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Workflow Engine
+          </h2>
         </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            A linear build system that transforms your existing photos, price lists, and catalogs into an operational web property in 48 hours.
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 p-6 sm:p-8 mb-8 overflow-hidden">
+        <svg class="w-full h-20 sm:h-32" viewBox="0 0 1000 160" fill="none" preserveAspectRatio="none">
+          <g fill="currentColor" class="text-ink dark:text-white">
+            <rect x="10" y="60" width="6" height="40" rx="3" opacity="0.25"/>
+            <rect x="26" y="45" width="6" height="70" rx="3" opacity="0.35"/>
+            <rect x="42" y="30" width="6" height="100" rx="3" opacity="0.5"/>
+            <rect x="58" y="15" width="6" height="130" rx="3" opacity="0.75"/>
+            <rect x="74" y="10" width="6" height="140" rx="3" opacity="0.9"/>
+            <rect x="90" y="25" width="6" height="110" rx="3" opacity="0.8"/>
+            <rect x="106" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="122" y="70" width="6" height="20" rx="3" opacity="0.3"/>
+            <rect x="138" y="40" width="6" height="80" rx="3" opacity="0.6"/>
+            <rect x="154" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="170" y="10" width="6" height="140" rx="3" opacity="1.0"/>
+            <rect x="186" y="25" width="6" height="110" rx="3" opacity="0.85"/>
+            <rect x="202" y="55" width="6" height="50" rx="3" opacity="0.4"/>
+            <rect x="218" y="40" width="6" height="80" rx="3" opacity="0.65"/>
+            <rect x="234" y="15" width="6" height="130" rx="3" opacity="0.9"/>
+            <rect x="250" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="266" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="282" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="298" y="35" width="6" height="90" rx="3" opacity="0.7"/>
+            <rect x="314" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="330" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="346" y="30" width="6" height="100" rx="3" opacity="0.75"/>
+            <rect x="362" y="60" width="6" height="40" rx="3" opacity="0.35"/>
+            <rect x="378" y="45" width="6" height="70" rx="3" opacity="0.6"/>
+            <rect x="394" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="410" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="426" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="442" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="458" y="35" width="6" height="90" rx="3" opacity="0.7"/>
+            <rect x="474" y="15" width="6" height="130" rx="3" opacity="0.95"/>
+            <rect x="490" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="506" y="25" width="6" height="110" rx="3" opacity="0.8"/>
+            <rect x="522" y="55" width="6" height="50" rx="3" opacity="0.4"/>
+            <rect x="538" y="40" width="6" height="80" rx="3" opacity="0.65"/>
+            <rect x="554" y="15" width="6" height="130" rx="3" opacity="0.9"/>
+            <rect x="570" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="586" y="25" width="6" height="110" rx="3" opacity="0.85"/>
+            <rect x="602" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="618" y="30" width="6" height="100" rx="3" opacity="0.75"/>
+            <rect x="634" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="650" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="666" y="25" width="6" height="110" rx="3" opacity="0.8"/>
+            <rect x="682" y="60" width="6" height="40" rx="3" opacity="0.35"/>
+            <rect x="698" y="45" width="6" height="70" rx="3" opacity="0.6"/>
+            <rect x="714" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="730" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="746" y="25" width="6" height="110" rx="3" opacity="0.85"/>
+            <rect x="762" y="55" width="6" height="50" rx="3" opacity="0.4"/>
+            <rect x="778" y="40" width="6" height="80" rx="3" opacity="0.65"/>
+            <rect x="794" y="15" width="6" height="130" rx="3" opacity="0.9"/>
+            <rect x="810" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="826" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="842" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="858" y="35" width="6" height="90" rx="3" opacity="0.7"/>
+            <rect x="874" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="890" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="906" y="30" width="6" height="100" rx="3" opacity="0.75"/>
+            <rect x="922" y="60" width="6" height="40" rx="3" opacity="0.35"/>
+            <rect x="938" y="40" width="6" height="80" rx="3" opacity="0.6"/>
+            <rect x="954" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="970" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="986" y="40" width="6" height="80" rx="3" opacity="0.5"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-surfaceCard/70 dark:bg-zinc-900/70 p-6 rounded-xl border border-hairline dark:border-zinc-800">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Stage 1</div>
+          <h3 class="font-display font-bold text-xl text-ink dark:text-white mb-2">Intake & Ingestion</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Provide your raw product photographs, service menus, and rates. No technical documentation needed.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard/70 dark:bg-zinc-900/70 p-6 rounded-xl border border-hairline dark:border-zinc-800">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Stage 2</div>
+          <h3 class="font-display font-bold text-xl text-ink dark:text-white mb-2">Staging Verification</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Within 24 hours, test your live staging environment directly on your mobile device to verify layouts and order triggers.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard/70 dark:bg-zinc-900/70 p-6 rounded-xl border border-hairline dark:border-zinc-800">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Stage 3</div>
+          <h3 class="font-display font-bold text-xl text-ink dark:text-white mb-2">Domain & SSL Deployment</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            We configure your official domain, establish encryption keys, and transfer complete operational ownership in 48 hours.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="md:h-[350vh] relative w-full border-t border-zinc-800/50 bg-matte md:bg-transparent">
-        <div class="md:sticky top-0 h-auto md:h-screen flex flex-col justify-center overflow-hidden py-24 md:py-0">
-
-            <div class="max-w-6xl mx-auto px-6 w-full mb-10 shrink-0 relative z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-3xl md:text-5xl font-black">Featured Builds</h2>
-                    <p class="text-silver text-xs font-mono mt-2">Click any tech badge below to highlight related projects</p>
-                </div>
-                <button id="clearFilterBtn" onclick="clearTechFilter()" class="hidden text-xs font-mono text-cyan border border-cyan/30 bg-cyan/10 px-4 py-2 rounded-full hover:bg-cyan hover:text-black transition">
-                    <i class="fa-solid fa-xmark mr-1"></i> Clear Filter
-                </button>
-            </div>
-
-            <div id="proj-slider" class="flex flex-col md:flex-row gap-8 px-6 md:px-[5vw] md:w-[320vw] transition-transform duration-75 ease-linear will-change-transform">
-
-                <!-- CyberShell -->
-                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
-                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan/10 rounded-full blur-3xl group-hover:bg-cyan/20 transition-all"></div>
-
-                    <div class="flex items-center justify-between mb-8">
-                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
-                            <i class="fa-solid fa-terminal text-2xl text-cyan"></i>
-                        </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">CLI Workstation</span>
-                    </div>
-
-                    <h3 class="text-3xl font-black mb-4 text-white font-mono">CyberShell v1.0</h3>
-                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
-                        An interactive, retro-futuristic Unix-style terminal interface featuring custom character-level block cursor rendering, Web Audio synthesis, Matrix rain canvas shaders, and built-in CLI games.
-                    </p>
-
-                    <div class="flex flex-wrap gap-2.5 mb-10 font-mono text-xs">
-                        <span onclick="filterByTech('Vanilla JS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Vanilla JS</span>
-                        <span onclick="filterByTech('Web Audio API')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Web Audio API</span>
-                        <span onclick="filterByTech('Canvas 2D')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Canvas 2D</span>
-                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Tailwind CSS</span>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
-                        <a href="./cybershell/" target="_blank" class="anim-btn bg-cyan text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                            Open Terminal 💻 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
-                        </a>
-                        <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
-                            <i class="fa-brands fa-github"></i> Source Code
-                        </a>
-                    </div>
-                </div>
-
-                <!-- CYBERDRIVE -->
-                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
-                    <div class="flex items-center justify-between mb-8">
-                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
-                            <i class="fa-solid fa-flag-checkered text-2xl text-cyan"></i>
-                        </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">HTML5 / Web Audio</span>
-                    </div>
-
-                    <h3 class="text-3xl font-black mb-4 text-white italic">CYBERDRIVE</h3>
-                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
-                        A next-gen 80s synthwave pseudo-3D arcade racer built entirely with pure HTML5 Canvas math and Web Audio synthesis. Features procedural track curves, dynamic traffic AI, and nitro heat management.
-                    </p>
-
-                    <div class="flex flex-wrap gap-2.5 mb-10 font-mono text-xs">
-                        <span onclick="filterByTech('Canvas 2D')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Canvas 2D</span>
-                        <span onclick="filterByTech('Web Audio API')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Web Audio API</span>
-                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Tailwind CSS</span>
-                        <span onclick="filterByTech('Anime.js')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Anime.js</span>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
-                        <a href="https://cyberdrive.vercel.app" target="_blank" class="anim-btn bg-cyan text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                            Launch Game 🏎️ <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
-                        </a>
-                        <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
-                            <i class="fa-brands fa-github"></i> Source Code
-                        </a>
-                    </div>
-                </div>
-
-                <!-- ShareShed -->
-                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-accent transition duration-300">
-                    <div class="flex items-center justify-between mb-8">
-                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
-                            <svg viewBox="0 0 100 100" fill="none" class="w-12 h-12">
-                                <rect width="100" height="100" rx="25" fill="#E07B39"/>
-                                <path d="M30 65l15-15m10-10l15-15m-20 35l15 15m-30-20l15-15" stroke="white" stroke-width="12" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-accent bg-[#2A1A12] px-4 py-2 rounded-full border border-accent/20">PWA / Web App</span>
-                    </div>
-
-                    <h3 class="text-3xl font-black mb-4 text-white">ShareShed</h3>
-                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
-                        A peer-to-peer neighborhood tool-sharing platform. Borrow drills, ladders, and equipment locally with built-in deposit safety and real-time chat.
-                    </p>
-
-                    <div class="flex flex-wrap gap-2.5 mb-10 font-mono text-xs">
-                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">Tailwind CSS</span>
-                        <span onclick="filterByTech('Supabase')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">Supabase</span>
-                        <span onclick="filterByTech('Vanilla JS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">JavaScript</span>
-                        <span onclick="filterByTech('PWA')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-accent transition">PWA</span>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
-                        <a href="https://shareshed-bice.vercel.app" target="_blank" class="anim-btn bg-white text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-gray-200 transition">
-                            Launch App 🛠️ <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
-                        </a>
-                        <a href="https://instagram.com/shareshedapp" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
-                            <i class="fa-brands fa-instagram"></i> @shareshedapp
-                        </a>
-                    </div>
-                </div>
-
-                <!-- AssetSlayer -->
-                <div class="project-card tilt-card spotlight-card border-beam w-full md:w-[70vw] lg:w-[800px] shrink-0 bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col hover:border-cyan transition duration-300 relative overflow-hidden group">
-                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan/10 rounded-full blur-3xl group-hover:bg-cyan/20 transition-all"></div>
-
-                    <div class="flex items-center justify-between mb-8">
-                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center shadow-lg border border-zinc-700">
-                            <i class="fa-solid fa-bolt text-2xl text-cyan"></i>
-                        </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">Client-Side Engine</span>
-                    </div>
-
-                    <h3 class="text-3xl font-black mb-4 text-white font-mono">AssetSlayer v1.0</h3>
-                    <p class="text-silver text-base leading-relaxed mb-8 max-w-2xl">
-                        Zero-server client-side asset optimization engine. Slay, compress, and convert web assets directly in your browser with real-time HTML5 Canvas quantization, interactive split-screen visual inspection, and EXIF scrubbing.
-                    </p>
-
-                    <div class="flex flex-wrap gap-2.5 mb-10 font-mono text-xs">
-                        <span onclick="filterByTech('Vanilla JS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Vanilla JS</span>
-                        <span onclick="filterByTech('Canvas 2D')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Canvas 2D</span>
-                        <span onclick="filterByTech('Tailwind CSS')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">Tailwind CSS</span>
-                        <span onclick="filterByTech('JSZip')" class="tech-pill text-zinc-300 bg-matte px-4 py-2 rounded-xl border border-zinc-800 cursor-pointer hover:border-cyan transition">JSZip</span>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-4 mt-auto pt-8 border-t border-zinc-800/80">
-                        <a href="https://tanzeemrockz.github.io/assetslayer" target="_blank" class="anim-btn bg-cyan text-black text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                            Launch Engine ⚡ <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-xs"></i>
-                        </a>
-                        <a href="https://github.com/tanzeemrockz" target="_blank" class="anim-btn text-silver text-sm font-semibold px-6 py-3.5 rounded-xl border border-zinc-800 hover:text-white hover:border-zinc-700 transition">
-                            <i class="fa-brands fa-github"></i> Source Code
-                        </a>
-                    </div>
-                </div>
-
-            </div>
+    <!-- Capabilities Section with scroll-mt-28 -->
+    <section id="capabilities" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Core Capabilities
+          </h2>
         </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Focused engineering features built to drive customer conversions through structured cataloging and automated communication.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            1
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Digital Lookbooks</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Showcase design variations, garment codes, or parts catalogs with clear specifications.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            2
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Direct Inquiries</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Pre-filled inquiry actions that identify specific designs and item codes instantly.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            3
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Search Indexing</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Clean metadata, location tagging, and performance optimizations for map and search queries.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            4
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Static Edge Host</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Global CDN delivery with reliable uptime, zero database latency, and automated SSL renewals.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="relative w-full max-w-6xl mx-auto px-6 py-24 z-20">
-        <div class="spotlight-card tilt-card border-beam bg-deep border border-zinc-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-cyan/10 rounded-full blur-3xl"></div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <div class="w-16 h-16 bg-deep rounded-2xl flex items-center justify-center border border-zinc-700 mb-6 shadow-lg">
-                            <i class="fa-solid fa-paper-plane text-2xl text-cyan"></i>
-                        </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan bg-cyan/10 px-4 py-2 rounded-full border border-cyan/20">Direct Inquiries</span>
-                        <h2 class="text-4xl md:text-6xl font-black text-white mt-6 mb-4">Let's build something <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-pink to-accent">unforgettable.</span></h2>
-                        <p class="text-silver text-base leading-relaxed max-w-md mb-8">Got a high-impact software vision, custom utility, or studio collaboration? Send a message directly to get started.</p>
-                    </div>
-
-                    <div class="flex flex-col gap-4 font-mono text-xs text-silver">
-                        <a href="mailto:contact@cyberslayercorpz.dev" class="flex items-center gap-3 hover:text-white transition">
-                            <div class="w-10 h-10 bg-matte border border-zinc-800 rounded-xl flex items-center justify-center text-cyan"><i class="fa-solid fa-envelope"></i></div>
-                            <span>contact@cyberslayercorpz.dev</span>
-                        </a>
-                        <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="flex items-center gap-3 hover:text-white transition">
-                            <div class="w-10 h-10 bg-matte border border-zinc-800 rounded-xl flex items-center justify-center text-pink"><i class="fa-brands fa-instagram"></i></div>
-                            <span>@cyberslayercorpz</span>
-                        </a>
-                    </div>
-                </div>
-
-                <form id="contactForm" onsubmit="handleContactSubmit(event)" class="flex flex-col gap-5 bg-matte p-8 rounded-2xl border border-zinc-800/80">
-                    <input type="hidden" name="access_key" value="865e56af-935b-4a9e-a6e5-ae7bad6ce9c1">
-                    <input type="hidden" name="subject" value="New Inquiry | CyberSlayerCorpz Lead">
-                    <input type="hidden" name="from_name" value="CyberSlayerCorpz Studio">
-
-                    <div class="flex flex-col gap-2">
-                        <label class="text-[11px] font-bold uppercase tracking-wider text-silver font-mono">Your Name / Organization</label>
-                        <input type="text" name="name" required placeholder="Name or Team" class="bg-deep border border-zinc-800 text-white font-mono text-sm px-4 py-3 rounded-xl outline-none focus:border-cyan transition">
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <label class="text-[11px] font-bold uppercase tracking-wider text-silver font-mono">Email Address</label>
-                        <input type="email" name="email" required placeholder="you@company.com" class="bg-deep border border-zinc-800 text-white font-mono text-sm px-4 py-3 rounded-xl outline-none focus:border-cyan transition">
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <label class="text-[11px] font-bold uppercase tracking-wider text-silver font-mono">Project Details</label>
-                        <textarea name="message" required rows="4" placeholder="Tell us about your project, tool idea, or build request..." class="bg-deep border border-zinc-800 text-white font-mono text-sm p-4 rounded-xl outline-none focus:border-cyan transition resize-none"></textarea>
-                    </div>
-                    <button type="submit" id="contactSubmitBtn" class="anim-btn bg-cyan text-black font-bold text-xs font-mono uppercase tracking-wider px-8 py-4 rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(0,240,255,0.3)] mt-2">
-                        Send Message <i class="fa-solid fa-arrow-right ml-2"></i>
-                    </button>
-                </form>
-            </div>
+    <!-- Specs Section with scroll-mt-28 -->
+    <section id="specs" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            What's In The Box
+          </h2>
         </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Every technical component configured, provisioned, and verified before client handoff.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 01</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Custom Domain Mapping</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Full DNS provisioning for `.in` or `.com` extensions with Apex to WWW redirects and root records.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 02</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Automated WebP Compression</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Every product photo is converted to WebP with responsive breakpoints for sub-second mobile downloads.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 03</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">TLS 1.3 Encryption Keys</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Hardware-backed SSL certificate installation with automated ninety-day renewal cron jobs.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 04</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Viewport Calibration</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Zero horizontal overflow with touch-target heights sized for one-handed thumb interaction.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 05</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Local Schema Indexing</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            JSON-LD structured business tags embedded to link Google Business Profiles, hours, and addresses.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 06</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">SKU Ingestion Routing</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Dynamic action hooks that append item codes, sizes, and collection names straight to inquiries.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="mt-auto bg-deep py-20 px-6 border-t border-zinc-800/80 relative z-20">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+    <!-- Deployments Section with scroll-mt-28 -->
+    <section id="deployments" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-10">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Selected Deployments
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Review active prototypes engineered for retail fashion, hospitality catering, and commercial packaging.
+          </p>
+        </div>
+      </div>
 
-            <div class="flex flex-col items-center md:items-start text-center md:text-left">
-                <div class="flex items-center gap-3 mb-4">
-                    <svg class="w-8 h-8" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g stroke-width="16" stroke-linecap="square">
-                            <polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/>
-                            <path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/>
-                        </g>
-                    </svg>
-                    <span class="font-bold text-xl tracking-tight text-white">CyberSlayer<span class="text-silver">Corpz</span></span>
-                </div>
-                <p class="text-sm text-zinc-500 mb-2">© 2026 CyberSlayerCorpz. All rights reserved.</p>
-                <p class="text-sm text-zinc-500">
-                    Made with ❤️ by <span class="text-sig font-bold">tanzeemrockz</span> | 
-                    Operator: <a href="https://cyberslayercorpz.dev" target="_blank" class="text-white hover:text-cyan underline underline-offset-2 transition">CyberSlayerCorpz</a>
-                </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <article class="bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 overflow-hidden flex flex-col justify-between p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs font-semibold text-inkMuted dark:text-zinc-500 border-b border-hairline/60 dark:border-zinc-800 pb-3">
+              <span>Bridal Studio</span>
+              <span>Lookbook</span>
             </div>
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Princy Boutique</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Bridal lookbook with embroidery design codes, turnaround lead times, and trial booking.
+            </p>
+          </div>
 
-            <div class="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm font-semibold text-zinc-400">
-                <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-instagram"></i> @cyberslayercorpz</a>
-                <a href="https://instagram.com/shareshedapp" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-instagram"></i> @shareshedapp</a>
-                <a href="https://github.com/tanzeemrockz" target="_blank" class="hover:text-white transition flex items-center gap-2"><i class="fa-brands fa-github"></i> GitHub</a>
-                <a href="mailto:contact@cyberslayercorpz.dev" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-envelope"></i> Contact Support</a>
+          <div class="pt-8">
+            <a href="https://demo.cyberslayercorpz.dev/princy-boutique" target="_blank" class="w-full inline-flex justify-between items-center bg-oatmeal dark:bg-zinc-800 border border-hairline dark:border-zinc-700 hover:bg-ink hover:text-oatmeal dark:hover:bg-white dark:hover:text-zinc-950 text-ink dark:text-white text-xs font-semibold px-4 py-3 rounded-lg transition duration-200">
+              <span>View Prototype</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 overflow-hidden flex flex-col justify-between p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs font-semibold text-inkMuted dark:text-zinc-500 border-b border-hairline/60 dark:border-zinc-800 pb-3">
+              <span>Catering</span>
+              <span>Menu Portal</span>
             </div>
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Jailani Biryani Feast</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Event catering portal with live guest tier calculators and custom order generation.
+            </p>
+          </div>
+
+          <div class="pt-8">
+            <a href="https://demo.cyberslayercorpz.dev/jailani-catering" target="_blank" class="w-full inline-flex justify-between items-center bg-oatmeal dark:bg-zinc-800 border border-hairline dark:border-zinc-700 hover:bg-ink hover:text-oatmeal dark:hover:bg-white dark:hover:text-zinc-950 text-ink dark:text-white text-xs font-semibold px-4 py-3 rounded-lg transition duration-200">
+              <span>View Prototype</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 overflow-hidden flex flex-col justify-between p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs font-semibold text-inkMuted dark:text-zinc-500 border-b border-hairline/60 dark:border-zinc-800 pb-3">
+              <span>Manufacturing</span>
+              <span>Catalog & RFQ</span>
+            </div>
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Sri Ganesh Packaging</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Industrial corrugated packaging catalog detailing ply construction, burst tests, and RFQ forms.
+            </p>
+          </div>
+
+          <div class="pt-8">
+            <a href="https://demo.cyberslayercorpz.dev/sri-ganesh-cartons" target="_blank" class="w-full inline-flex justify-between items-center bg-oatmeal dark:bg-zinc-800 border border-hairline dark:border-zinc-700 hover:bg-ink hover:text-oatmeal dark:hover:bg-white dark:hover:text-zinc-950 text-ink dark:text-white text-xs font-semibold px-4 py-3 rounded-lg transition duration-200">
+              <span>View Prototype</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Timeline Section with scroll-mt-28 -->
+    <section id="timeline" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            48-Hour Roadmap
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            A look at how a project moves from asset handover to an active production URL.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 00 – 04</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Asset Handover</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Assets received, 50% advance confirmed, and domain records registered with target registrars.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 04 – 24</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Core Assembly</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Layout construction, WebP conversion, mobile viewport testing, and staging build deployment.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 24 – 36</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Staging Review</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Review live prototype link on mobile, test inquiry routing buttons, and apply adjustments.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 36 – 48</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">DNS Go-Live</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            SSL keys bound to official domain, remaining balance settled, and ownership keys handed over.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section with scroll-mt-28 -->
+    <section id="pricing" class="scroll-mt-28 mb-32 pt-4">
+      <div class="bg-ink dark:bg-zinc-900 text-oatmeal dark:text-white rounded-3xl p-8 sm:p-14 border border-ink dark:border-zinc-800 shadow-xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-7 space-y-4">
+            <div class="text-xs font-semibold text-hairline dark:text-zinc-400 tracking-wider uppercase">
+              Flat Pricing
+            </div>
+            <h2 class="font-display font-extrabold text-4xl sm:text-6xl tracking-tight text-white leading-tight">
+              ₹7,000 Setup.
+            </h2>
+            <p class="text-xs sm:text-sm text-hairline/80 dark:text-zinc-400 max-w-lg leading-relaxed">
+              Everything included to get your business website live. No hidden agency retainers or monthly host fees.
+            </p>
+
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 text-xs text-hairline/90 dark:text-zinc-300">
+              <li class="flex items-center gap-2"><span>•</span> Custom 1-Page Mobile Website</li>
+              <li class="flex items-center gap-2"><span>•</span> 1 Year .in or .com Domain</li>
+              <li class="flex items-center gap-2"><span>•</span> 1 Year Cloud Hosting & SSL</li>
+              <li class="flex items-center gap-2"><span>•</span> Direct Inquiry Buttons</li>
+              <li class="flex items-center gap-2"><span>•</span> 48-Hour Turnaround</li>
+              <li class="flex items-center gap-2"><span>•</span> 50% Advance (₹3,500) to Begin</li>
+            </ul>
+          </div>
+
+          <div class="lg:col-span-5 bg-[#1F1E1C] dark:bg-black p-8 rounded-2xl border border-white/10 dark:border-zinc-800 text-center space-y-4">
+            <div class="text-xs text-hairline dark:text-zinc-400 uppercase tracking-wider font-semibold">Ready to Launch</div>
+            <div class="font-display font-bold text-3xl text-white">48-Hour Delivery</div>
+            <p class="text-xs text-hairline/70 dark:text-zinc-400">
+              Reserve your build slot with a ₹3,500 advance. Remaining balance is due only upon staging review approval.
+            </p>
+            <a href="#contact" class="block w-full bg-oatmeal text-ink dark:bg-white dark:text-zinc-950 hover:bg-white text-xs font-semibold py-3.5 rounded-full tracking-tight transition duration-200">
+              Book Project
+            </a>
+          </div>
 
         </div>
-    </footer>
+      </div>
+    </section>
 
-    <!-- Command Palette (Cmd+K) -->
-    <div id="cmdPalette" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-6">
-        <div class="bg-deep border border-zinc-800 rounded-3xl w-full max-w-xl p-8 shadow-2xl flex flex-col gap-6 relative">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-terminal text-cyan text-xl"></i>
-                    <span class="font-mono font-bold text-white text-sm">Studio Quick Navigator</span>
-                </div>
-                <button onclick="toggleCmdPalette()" class="text-zinc-500 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <input type="text" id="cmdInput" placeholder="Search builds, skills, or links..." class="bg-matte border border-zinc-800 text-white font-mono text-sm px-4 py-3 rounded-xl outline-none focus:border-cyan">
-
-            <div class="flex flex-col gap-2 font-mono text-xs max-h-60 overflow-y-auto hide-scrollbar" id="cmdResults">
-                <a href="https://tanzeemrockz.github.io/assetslayer" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
-                    <span>⚡ Launch AssetSlayer v1.0</span>
-                    <span class="text-zinc-500">github.io/assetslayer</span>
-                </a>
-                <a href="./cybershell/" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
-                    <span>💻 Open CyberShell CLI Workstation</span>
-                    <span class="text-zinc-500">/cybershell</span>
-                </a>
-                <a href="https://cyberdrive.vercel.app" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
-                    <span>🏎️ Launch CyberDrive Arcade</span>
-                    <span class="text-zinc-500">cyberdrive.vercel.app</span>
-                </a>
-                <a href="https://shareshed-bice.vercel.app" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
-                    <span>🛠️ Launch ShareShed App</span>
-                    <span class="text-zinc-500">shareshed-bice.vercel.app</span>
-                </a>
-                <a href="https://github.com/tanzeemrockz" target="_blank" class="p-3 bg-matte hover:bg-zinc-800 rounded-xl flex items-center justify-between transition text-zinc-300 hover:text-white">
-                    <span>🐙 GitHub Profile</span>
-                    <span class="text-zinc-500">@tanzeemrockz</span>
-                </a>
-            </div>
-            <div class="text-[10px] font-mono text-zinc-500 text-center">Press ESC or click X to close</div>
+    <!-- FAQ Section -->
+    <section class="mb-32 pt-8">
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Frequently Asked Questions
+          </h2>
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400">Clear answers on how we deploy, maintain, and transfer your site.</p>
         </div>
+
+        <div class="space-y-4">
+          <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800">
+            <h4 class="font-display font-bold text-base text-ink dark:text-white mb-1">What happens after the first year of hosting and domain?</h4>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Domain registration and static hosting renew at exact cost (typically ~₹1,200/year for `.in` or `.com` plus DNS). We never charge mandatory agency retainers.
+            </p>
+          </div>
+
+          <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800">
+            <h4 class="font-display font-bold text-base text-ink dark:text-white mb-1">Do I need to write text or provide finished designs?</h4>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              No. Send us your product photos, catalog sheets, address, and a brief description of your services. We format the typography, write the copy, and assemble the page structure for you.
+            </p>
+          </div>
+
+          <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800">
+            <h4 class="font-display font-bold text-base text-ink dark:text-white mb-1">What is the payment milestone breakdown?</h4>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              We charge a 50% advance (₹3,500) to secure your staging deployment slot and register your domain. The final 50% balance is payable only after you verify the working prototype on your phone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Channels with scroll-mt-28 -->
+    <section id="contact" class="scroll-mt-28 pt-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Direct Contact</div>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Get in Touch
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Direct communication channels for new project requests and asset submissions.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 1</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Instagram</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Send your profile link, current photos, or project inquiries directly to our inbox.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>@cyberslayercorpz</span>
+            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+          </div>
+        </a>
+
+        <a href="mailto:contact@cyberslayercorpz.dev" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 2</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Project Desk</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Forward catalogs, menus, or specifications directly to our studio address.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>contact@cyberslayercorpz.dev</span>
+            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+          </div>
+        </a>
+
+        <a href="#quick-inquiry" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 3</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Web Inquiry</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Submit your project scope and phone number via our instant submission portal.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>Online Form</span>
+            <span class="group-hover:translate-y-1 transition-transform">↓</span>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfMF3Inm3AfIOPMHFS1sq2yTuSkACQ6QweBD9RDcf93SqHGeg/viewform?usp=header" target="_blank" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 4</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Client Intake</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Complete the structured onboarding form to provide your domain, address, and files.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>Google Forms</span>
+            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Web3Forms Form with scroll-mt-28 and production access key -->
+      <div id="quick-inquiry" class="scroll-mt-28 max-w-2xl mx-auto bg-surfaceCard dark:bg-zinc-900 p-8 rounded-3xl border border-hairline dark:border-zinc-800">
+        <div class="mb-6 space-y-1">
+          <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Quick Project Inquiry</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400">Send your project details straight to our desk via Web3Forms.</p>
+        </div>
+
+        <form action="https://api.web3forms.com/submit" method="POST" class="space-y-4">
+          <input type="hidden" name="access_key" value="865e56af-935b-4a9e-a6e5-ae7bad6ce9c1" />
+          <input type="hidden" name="subject" value="New Web Inquiry - CyberSlayerCorpz" />
+
+          <div>
+            <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Your Name</label>
+            <input type="text" name="name" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="e.g. Ramesh Kumar" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Email or Phone</label>
+              <input type="text" name="contact" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="+91 or email@domain.com" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Business Name</label>
+              <input type="text" name="business" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="e.g. Princy Aari Studio" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Project Details</label>
+            <textarea name="message" rows="3" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="Tell us about your products, requirements, or target launch date..."></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold py-3.5 rounded-xl tracking-tight transition duration-200 shadow-sm">
+            Send Inquiry
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Editorial Minimalist Footer -->
+  <footer class="border-t border-hairline dark:border-zinc-800 py-10 bg-oatmealDark/40 dark:bg-zinc-950/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-xs text-inkMuted dark:text-zinc-500 gap-4">
+      <div class="flex items-center gap-3">
+        <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" alt="CyberSlayerCorpz Logo" class="w-5 h-5 rounded-sm" />
+        <span class="font-display font-bold text-ink dark:text-white text-sm">CyberSlayerCorpz</span>
+      </div>
+
+      <div class="text-xs">
+        Fast-Turnaround Digital Engineering
+      </div>
     </div>
+  </footer>
 
-    <!-- Scripts -->
-    <script>
-        const heroTrack = document.getElementById('hero-track');
-        const heroContent = document.getElementById('hero-content');
-        const heroHex = document.getElementById('hero-hex');
-        const projTrack = document.getElementById('projects');
-        const projSlider = document.getElementById('proj-slider');
-        const progressBar = document.getElementById('scroll-progress');
-        const aura = document.getElementById('cursor-aura');
+  <script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    themeToggleBtn.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  </script>
 
-        function onScrollEngine() {
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            if (totalHeight > 0) {
-                const scrolled = (window.scrollY / totalHeight) * 100;
-                progressBar.style.width = `${scrolled}%`;
-            }
-
-            const isDesktop = window.innerWidth >= 768;
-
-            if (!isDesktop) {
-                heroContent.style.opacity = 1;
-                heroContent.style.transform = 'none';
-                projSlider.style.transform = 'none';
-                return;
-            }
-
-            const heroRect = heroTrack.getBoundingClientRect();
-            let hProgress = -heroRect.top / (heroRect.height - window.innerHeight);
-            hProgress = Math.max(0, Math.min(1, hProgress));
-
-            heroContent.style.opacity = Math.max(0, 1 - (hProgress * 1.5));
-            heroContent.style.transform = `scale(${1 - (hProgress * 0.12)}) translateY(${hProgress * 80}px)`;
-
-            if (hProgress > 0) {
-                heroHex.style.opacity = Math.min(0.6, hProgress * 1.5);
-                heroHex.style.transform = `translate(-50%, -50%) scale(${1 + (hProgress * 20)}) rotate(${hProgress * 180}deg)`;
-            }
-
-            const projRect = projTrack.getBoundingClientRect();
-            let pProgress = -projRect.top / (projRect.height - window.innerHeight);
-            pProgress = Math.max(0, Math.min(1, pProgress));
-
-            const maxScroll = projSlider.scrollWidth - window.innerWidth + 48; 
-            if (maxScroll > 0) {
-                projSlider.style.transform = `translate3d(${-pProgress * maxScroll}px, 0, 0)`;
-            }
-        }
-
-        window.addEventListener('scroll', () => {
-            requestAnimationFrame(onScrollEngine);
-        }, { passive: true });
-
-        requestAnimationFrame(onScrollEngine);
-
-        const hudText = document.getElementById('hud-text');
-        const observerOptions = {
-            root: null,
-            rootMargin: '-40% 0px -40% 0px',
-            threshold: 0
-        };
-
-        const capObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const moduleName = entry.target.getAttribute('data-module');
-                    hudText.innerText = moduleName;
-
-                    anime({
-                        targets: hudText,
-                        opacity: [0.3, 1],
-                        color: ['#9E9EA8', '#00F0FF', '#FFFFFF'],
-                        duration: 400,
-                        easing: 'easeOutCubic'
-                    });
-
-                    anime({
-                        targets: entry.target,
-                        borderColor: '#00F0FF',
-                        translateX: window.innerWidth >= 768 ? 20 : 0,
-                        duration: 300,
-                        easing: 'easeOutQuint'
-                    });
-                } else {
-                    anime({
-                        targets: entry.target,
-                        borderColor: '#27272A',
-                        translateX: 0,
-                        duration: 300,
-                        easing: 'easeOutQuad'
-                    });
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.cap-pill').forEach(pill => capObserver.observe(pill));
-
-        document.querySelectorAll('.anim-btn').forEach(btn => {
-            btn.addEventListener('mousedown', () => {
-                anime({ targets: btn, scale: 0.96, duration: 120, easing: 'easeOutQuad' });
-            });
-            btn.addEventListener('mouseup', () => {
-                anime({ targets: btn, scale: 1, duration: 300, easing: 'easeOutElastic(1, .6)' });
-            });
-            btn.addEventListener('mouseleave', () => {
-                anime({ targets: btn, scale: 1, duration: 250, easing: 'easeOutQuad' });
-            });
-        });
-
-        const canvas = document.getElementById('hero-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            const count = Math.min(45, Math.floor((canvas.width * canvas.height) / 24000));
-            for (let i = 0; i < count; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
-                    size: Math.random() * 1.8 + 1
-                });
-            }
-        }
-
-        window.addEventListener('resize', initCanvas);
-        window.addEventListener('mousemove', (e) => {
-            if (aura) {
-                aura.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-            }
-        });
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#9E9EA8';
-                ctx.fill();
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (dist < 90) {
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.12 * (1 - dist / 90)})`;
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateCanvas);
-        }
-        initCanvas();
-        animateCanvas();
-
-        document.querySelectorAll('.spotlight-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-            });
-        });
-
-        document.querySelectorAll('.tilt-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                const rotateX = (-y / rect.height) * 8;
-                const rotateY = (x / rect.width) * 8;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            });
-        });
-
-        function toggleMobileNav() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
-
-        function toggleCmdPalette() {
-            const palette = document.getElementById('cmdPalette');
-            const isHidden = palette.classList.contains('hidden');
-            if (isHidden) {
-                palette.classList.remove('hidden');
-                palette.classList.add('flex');
-                document.getElementById('cmdInput').focus();
-            } else {
-                palette.classList.add('hidden');
-                palette.classList.remove('flex');
-            }
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                toggleCmdPalette();
-            }
-            if (e.key === 'Escape') {
-                document.getElementById('cmdPalette').classList.add('hidden');
-                document.getElementById('cmdPalette').classList.remove('flex');
-            }
-        });
-
-        document.getElementById('cmdInput').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            document.querySelectorAll('#cmdResults a').forEach(link => {
-                const text = link.textContent.toLowerCase();
-                link.style.display = text.includes(query) ? 'flex' : 'none';
-            });
-        });
-
-        function filterByTech(tech) {
-            const cards = document.querySelectorAll('.project-card');
-            const capPills = document.querySelectorAll('.cap-pill');
-            const clearBtn = document.getElementById('clearFilterBtn');
-
-            clearBtn.classList.remove('hidden');
-
-            cards.forEach(card => {
-                const hasTech = card.innerHTML.toLowerCase().includes(tech.toLowerCase());
-                card.classList.toggle('dimmed', !hasTech);
-                card.classList.toggle('highlighted', hasTech);
-            });
-
-            capPills.forEach(pill => {
-                const tags = pill.getAttribute('data-tags') || '';
-                const hasTech = tags.toLowerCase().includes(tech.toLowerCase());
-                pill.classList.toggle('dimmed', !hasTech);
-            });
-        }
-
-        function clearTechFilter() {
-            document.querySelectorAll('.project-card, .cap-pill').forEach(el => {
-                el.classList.remove('dimmed', 'highlighted');
-            });
-            document.getElementById('clearFilterBtn').classList.add('hidden');
-        }
-
-        async function handleContactSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('contactSubmitBtn');
-            const form = document.getElementById('contactForm');
-
-            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin mr-2"></i> Sending...';
-            btn.disabled = true;
-
-            const formData = new FormData(form);
-
-            try {
-                const response = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-
-                if (data.success) {
-                    btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Message Sent!';
-                    btn.classList.remove('bg-cyan');
-                    btn.classList.add('bg-emerald-400');
-                    form.reset();
-                } else {
-                    btn.innerHTML = 'Transmission Failed';
-                }
-            } catch (err) {
-                btn.innerHTML = 'Network Error';
-            }
-
-            setTimeout(() => {
-                btn.innerHTML = 'Send Message <i class="fa-solid fa-arrow-right ml-2"></i>';
-                btn.classList.remove('bg-emerald-400');
-                btn.classList.add('bg-cyan');
-                btn.disabled = false;
-            }, 3500);
-        }
-    </script>
 </body>
 </html>
