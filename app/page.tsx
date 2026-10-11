@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import anime from 'animejs'
+import { animate, stagger } from 'animejs'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, BarChart3, Check, ChevronDown, CircleGauge, Database, Menu, ShieldCheck, X, Zap } from 'lucide-react'
 
@@ -24,9 +24,9 @@ export default function Page() {
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduceMotion) return
-    const intro = anime({ targets: '.hero-inner > *', translateY: [24, 0], opacity: [0, 1], delay: anime.stagger(90), duration: 850, easing: 'cubicBezier(.22,1,.36,1)' })
-    const pulse = anime({ targets: '.hero-orbit', rotate: 360, duration: 24000, easing: 'linear', loop: true })
-    const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { anime({ targets: entry.target, translateY: [28, 0], opacity: [0, 1], duration: 700, easing: 'cubicBezier(.22,1,.36,1)' }); revealObserver.unobserve(entry.target) } }), { threshold: 0.12 })
+    const intro = animate('.hero-inner > *', { translateY: [24, 0], opacity: [0, 1], delay: stagger(90), duration: 850, ease: 'cubicBezier(.22,1,.36,1)' })
+    const pulse = animate('.hero-orbit', { rotate: 360, duration: 24000, ease: 'linear', loop: true })
+    const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { animate(entry.target, { translateY: [28, 0], opacity: [0, 1], duration: 700, ease: 'cubicBezier(.22,1,.36,1)' }); revealObserver.unobserve(entry.target) } }), { threshold: 0.12 })
     document.querySelectorAll('.inferago-section > *').forEach(element => revealObserver.observe(element))
     return () => { intro.pause(); pulse.pause(); revealObserver.disconnect() }
   }, [])
