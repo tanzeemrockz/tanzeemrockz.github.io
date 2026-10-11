@@ -9,7 +9,7 @@ export default function NotFound() {
       <div className="ambient-orb ambient-orb-blue" aria-hidden="true" />
       <header className="inferago-header">
         <Link href="/" className="inferago-brand">
-          <span className="brand-mark" aria-hidden="true">⌬</span>
+          <svg className="brand-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" aria-hidden="true"><rect width="500" height="500" rx="100" fill="#18181B"/><g strokeWidth="16" strokeLinecap="square"><polygon points="250 110 360 180 360 320 250 390 140 320 140 180" stroke="#fff" fill="none"/><path d="M250 110V250M360 180L250 250M140 180L250 250" stroke="#A1A1AA" strokeWidth="10" fill="none"/></g></svg>
           <span>CyberSlayerCorpz</span>
         </Link>
         <nav className="inferago-nav" aria-label="Primary navigation">
