@@ -43,6 +43,8 @@ export default function PatternWaves({
   fadeSize = 0.5,
   intro = true,
   paused = false,
+  depth = 0.95,
+  shine = 0.8,
 }: PatternWavesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -93,28 +95,49 @@ export default function PatternWaves({
         context.lineWidth = 1
         context.globalAlpha = opacity
 
+        const reveal = intro ? Math.min(1, (now - start) / 1200) : 1
         for (let row = -rows; row < rows; row += 1) {
+          const sourceY = row * spacing
           context.beginPath()
           for (let column = -columns; column < columns; column += 1) {
             const sourceX = column * spacing
-            const sourceY = row * spacing
             const x = centerX + sourceX * cos - sourceY * sin
             const y = centerY + sourceX * sin + sourceY * cos
-            const wave = Math.sin(sourceX * 0.035 + elapsed * 3 + Math.sin(sourceY * 0.025 + elapsed * 2)) * 3
             const distance = Math.hypot(x - pointer.x, y - pointer.y)
             const influence = interactive ? Math.max(0, 1 - distance / (cursorSize * 4)) * cursorStrength : 0
-            const lift = wave + influence * Math.sin(distance * 0.16 - elapsed * 5) * 12
+            const silk = Math.sin(sourceX * 0.028 + elapsed * 2.4 + Math.sin(sourceY * 0.02 + elapsed * 1.7))
+            const ripple = influence * Math.sin(distance * 0.12 - elapsed * 4.5)
+            const lift = silk * 8 * depth + ripple * 26
             const pointX = x + lift * cos
             const pointY = y + lift * sin
             const edge = Math.min(x / width, 1 - x / width, y / height, 1 - y / height)
             const alpha = Math.max(0, Math.min(1, edge / Math.max(0.01, fadeSize * 0.5)))
-            context.globalAlpha = opacity * alpha * (intro ? Math.min(1, (now - start) / 1200) : 1)
-            context.beginPath()
-            context.arc(pointX, pointY, 0.72 + influence * 0.8, 0, Math.PI * 2)
+            const pointAlpha = opacity * alpha * reveal * (0.42 + (silk + 1) * 0.18)
+            if (column === -columns) context.moveTo(pointX, pointY)
+            else context.lineTo(pointX, pointY)
+            context.globalAlpha = pointAlpha
+          }
+          context.strokeStyle = color
+          context.lineWidth = 0.55 + shine * 0.45
+          context.stroke()
+        }
+
+        for (let row = -rows; row < rows; row += 2) {
+          for (let column = -columns; column < columns; column += 2) {
+            const sourceX = column * spacing
+            const sourceY = row * spacing
+            const x = centerX + sourceX * cos - sourceY * sin
+            const y = centerY + sourceX * sin + sourceY * cos
+            const distance = Math.hypot(x - pointer.x, y - pointer.y)
+            const influence = interactive ? Math.max(0, 1 - distance / (cursorSize * 4)) * cursorStrength : 0
+            const edge = Math.min(x / width, 1 - x / width, y / height, 1 - y / height)
+            const alpha = Math.max(0, Math.min(1, edge / Math.max(0.01, fadeSize * 0.5)))
+            context.globalAlpha = opacity * alpha * reveal * (0.15 + influence * 0.85)
             context.fillStyle = color
+            context.beginPath()
+            context.arc(x, y, 0.45 + influence * 1.5, 0, Math.PI * 2)
             context.fill()
           }
-          context.stroke()
         }
         context.globalAlpha = 1
       }
@@ -137,7 +160,7 @@ export default function PatternWaves({
       canvas.removeEventListener('pointerleave', leave)
       frame = 0
     }
-  }, [backgroundColor, color, cursorSize, cursorStrength, direction, fadeSize, interactive, intro, opacity, paused, spacing, speed])
+  }, [backgroundColor, color, cursorSize, cursorStrength, depth, direction, fadeSize, interactive, intro, opacity, paused, shine, spacing, speed])
 
   return <canvas ref={canvasRef} className={`pattern-waves-canvas ${className}`} aria-hidden="true" />
 }
