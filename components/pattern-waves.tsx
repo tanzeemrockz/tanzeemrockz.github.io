@@ -717,7 +717,7 @@ const PatternWaves = ({
 
     const refreshAtlas = (s: Settings) => {
       if (s.characters === atlasKey) return;
-      atlasKey = ********
+      atlasKey = s.characters
       const built = buildAtlas(s.characters);
       if (!built) return;
       atlasTexture.image = built.canvas;
