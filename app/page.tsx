@@ -48,9 +48,9 @@ export default function Page() {
     <section id="top" className="relative mx-auto flex min-h-[780px] max-w-[1240px] flex-col justify-center px-5 pb-28 pt-40 lg:px-8">
       <div className="pointer-events-none absolute -left-20 top-32 h-[500px] w-[800px] rounded-full bg-blue-500/[0.08] blur-[120px]" />
       <div className="relative max-w-4xl">
-        <div className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500"><span className="h-2 w-2 rounded-full bg-emerald-400" />Production-ready digital systems</div>
-        <h1 className="max-w-5xl text-5xl font-medium leading-[0.98] tracking-[-0.06em] sm:text-7xl lg:text-[104px]">We build digital products <span className="text-sky-400">that move businesses forward.</span></h1>
-        <p className="mt-10 max-w-xl text-base leading-7 text-zinc-400 sm:text-lg">Websites, catalogs, inquiry systems and growth foundations, designed and built to help ambitious businesses get chosen.</p>
+        <div className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500"><span className="h-2 w-2 rounded-full bg-emerald-400" />CyberSlayerCorpz · Digital studio</div>
+        <h1 className="max-w-5xl text-5xl font-medium leading-[0.98] tracking-[-0.06em] sm:text-7xl lg:text-[104px]">A sharper digital presence <span className="text-sky-400">for businesses ready to grow.</span></h1>
+        <p className="mt-10 max-w-xl text-base leading-7 text-zinc-400 sm:text-lg">CyberSlayerCorpz designs and builds high-converting websites, catalogs and inquiry journeys that make growing businesses easier to find, trust and choose.</p>
         <div className="mt-10 flex flex-wrap gap-3"><a href="#contact" className="rounded-full bg-white px-6 py-3.5 text-sm font-medium text-black transition-transform hover:-translate-y-1">Start a project <ArrowUpRight className="ml-1 inline h-4 w-4" /></a><a href="#work" className="rounded-full border border-white/15 px-6 py-3.5 text-sm text-zinc-300 transition-colors hover:border-white/40 hover:text-white">View our work</a></div>
       </div>
       <div className="absolute bottom-7 left-5 right-5 border-t border-white/[0.08] pt-5 lg:left-8 lg:right-8"><div className="flex gap-8 overflow-hidden whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-600"><span>Websites</span><span>Digital products</span><span>Growth</span><span>SEO</span><span>Automation</span><span>Websites</span><span>Digital products</span></div></div>
