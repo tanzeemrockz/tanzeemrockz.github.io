@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from 'react'
 
-const EFFECT_DEPENDENCIES: [] = []
+const EFFECT_DEPENDENCIES = [
+  'pattern-waves-canvas',
+] as const
 
 type PatternWavesProps = {
   className?: string

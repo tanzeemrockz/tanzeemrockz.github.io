@@ -25,9 +25,9 @@ export default function Page() {
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduceMotion) return
-    const intro = animate('.hero-inner > *', { translateY: [24, 0], opacity: [0, 1], delay: stagger(90), duration: 850, ease: 'cubicBezier(.22,1,.36,1)' })
+    const intro = animate('.hero-inner > *', { translateY: [24, 0], opacity: [0, 1], delay: stagger(90), duration: 850, ease: 'out(4)' })
     const pulse = animate('.hero-orbit', { rotate: 360, duration: 24000, ease: 'linear', loop: true })
-    const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { animate(entry.target, { translateY: [28, 0], opacity: [0, 1], duration: 700, ease: 'cubicBezier(.22,1,.36,1)' }); revealObserver.unobserve(entry.target) } }), { threshold: 0.12 })
+    const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { animate(entry.target, { translateY: [28, 0], opacity: [0, 1], duration: 700, ease: 'out(4)' }); revealObserver.unobserve(entry.target) } }), { threshold: 0.12 })
     document.querySelectorAll('.inferago-section > *').forEach(element => revealObserver.observe(element))
     return () => { intro.pause(); pulse.pause(); revealObserver.disconnect() }
   }, [])
