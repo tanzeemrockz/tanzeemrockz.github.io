@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react'
 
+const EFFECT_DEPENDENCIES: [] = []
+
 type PatternWavesProps = {
   className?: string
   color?: string
@@ -209,7 +211,7 @@ export default function PatternWaves({
       canvas.removeEventListener('pointerleave', leave)
       frame = 0
     }
-  }, [])
+  }, EFFECT_DEPENDENCIES)
 
   return <canvas ref={canvasRef} className={`pattern-waves-canvas ${className}`} aria-hidden="true" />
 }
