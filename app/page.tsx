@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { animate, stagger } from 'animejs'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, BarChart3, Check, ChevronDown, CircleGauge, Database, Menu, ShieldCheck, X, Zap } from 'lucide-react'
+import PatternWaves from '../components/pattern-waves'
 
 const logo = <svg className="brand-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" aria-hidden="true"><rect width="500" height="500" rx="100" fill="#18181B"/><g strokeWidth="16" strokeLinecap="square"><polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#fff" fill="none"/><path d="M250 110V250M360 180L250 250M140 180L250 250" stroke="#A1A1AA" strokeWidth="10" fill="none"/></g></svg>
 
@@ -32,6 +33,33 @@ export default function Page() {
   }, [])
 
   return <main className="inferago-page" id="top">
+    <div className="pattern-waves-background" aria-hidden="true">
+      <PatternWaves
+        preset="silk"
+        color="#ffffff"
+        backgroundColor="#120f17"
+        fade="edges"
+        interactive
+        cursorSize={50}
+        cursorStrength={0.6}
+        pattern="dot"
+        wave="silk"
+        spacing={9}
+        markSize={0.95}
+        depth={0.95}
+        light={0}
+        shine={0.8}
+        contrast={1.2}
+        speed={0.35}
+        scale={1}
+        direction={20}
+        opacity={1}
+        fadeSize={0.5}
+        characters=".:-=+*#%@"
+        intro
+        paused={false}
+      />
+    </div>
     <div className="scroll-progress" aria-hidden="true" />
     <div className="ambient-orb ambient-orb-orange" aria-hidden="true" />
     <div className="ambient-orb ambient-orb-blue" aria-hidden="true" />
