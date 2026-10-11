@@ -706,8 +706,7 @@ const TechText = ({
     container.addEventListener('pointercancel', onUp, { passive: true });
     container.addEventListener('pointerleave', onLeave, { passive: true });
 
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(container);
+    window.addEventListener('resize', resize, { passive: true });
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       wake();
@@ -722,7 +721,7 @@ const TechText = ({
       cancelAnimationFrame(raf);
       cancelAnimationFrame(resizeFrame);
       wakeRef.current = () => {};
-      resizeObserver.disconnect();
+      window.removeEventListener('resize', resize);
       intersectionObserver.disconnect();
       container.removeEventListener('pointermove', onMove);
       container.removeEventListener('pointerenter', onMove);
