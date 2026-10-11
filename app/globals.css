@@ -49,7 +49,7 @@ button, input, textarea { font: inherit; }
 .inferago-page { position: relative; isolation: isolate; }
 .inferago-page > *:not(.ambient-orb):not(.scroll-progress) { position: relative; z-index: 1; }
 .inferago-page > .top-announcement { position: relative; z-index: 35 !important; }
-.inferago-page > .inferago-header { position: sticky; z-index: 40 !important; }
+.inferago-page > .inferago-header { position: fixed !important; top: 14px; z-index: 50 !important; }
 .inferago-header { animation: header-drop .8s cubic-bezier(.22,1,.36,1) both; }
 .hero-buttons a, .hero-scroll { will-change: transform; }
 .intro-card, .capability-grid article, .work-card, .price-panel, .process-rows > div, .faq-list details, .contact-form label { will-change: transform; }
