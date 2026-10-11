@@ -1,61 +1,725 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#09090b" />
-  <meta name="description" content="CyberSlayerCorpz builds fast-turnaround websites, catalogs, and booking systems for growing businesses." />
-  <title>CyberSlayerCorpz — Digital engineering for growing businesses</title>
+  <title>CyberSlayerCorpz — Indie Software Studio</title>
+
+  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Fonts: Syne, Plus Jakarta Sans, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['DM Mono','monospace']},colors:{ink:'#09090b',panel:'#121215',line:'#27272a'}}}}</script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            oatmeal: '#ECE7E1',
+            oatmealDark: '#E2DCD4',
+            ink: '#141312',
+            inkMuted: '#585550',
+            hairline: '#D5CEC4',
+            surfaceCard: '#E7E2DA'
+          },
+          fontFamily: {
+            display: ['"Syne"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Dark Mode Persistence Script -->
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
   <style>
-    :root { color-scheme: dark; }
-    body { background:#09090b; color:#fafafa; font-family:Inter, sans-serif; overflow-x:hidden; }
-    .grid-bg { background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size:72px 72px; mask-image:linear-gradient(to bottom, black, transparent 75%); }
-    .hero-glow { background: radial-gradient(ellipse 55% 45% at 50% 8%, rgba(255,255,255,.09), transparent 70%); }
-    .glass { background:rgba(18,18,21,.8); border:1px solid #27272a; }
-    .eyebrow { color:#a1a1aa; font:500 11px/1.2 'DM Mono', monospace; letter-spacing:.14em; text-transform:uppercase; }
-    .arrow { transition:transform .2s ease; }
-    a:hover .arrow, button:hover .arrow { transform:translateX(3px); }
-    .work-card, .service-card, .process-card { transition:border-color .2s ease, transform .2s ease, background .2s ease; }
-    .work-card:hover, .service-card:hover, .process-card:hover { border-color:#52525b; transform:translateY(-3px); background:#18181b; }
-    @media (max-width: 760px) { .desktop-nav { display:none; } .mobile-menu { display:block !important; } }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      z-index: 999;
+    }
   </style>
 </head>
-<body>
-  <div class="pointer-events-none fixed inset-0 grid-bg"></div>
-  <div class="pointer-events-none fixed inset-0 hero-glow"></div>
-  <header class="relative z-10 px-5 pt-5 sm:px-8 lg:px-12">
-    <nav class="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-zinc-800 bg-zinc-950/80 px-4 py-3 backdrop-blur-md sm:px-5" aria-label="Primary navigation">
-      <a href="#top" class="flex items-center gap-2.5 text-sm font-semibold tracking-tight"><svg class="h-6 w-6 rounded" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" aria-hidden="true"><rect width="500" height="500" rx="100" fill="#18181B"/><g stroke-width="16" stroke-linecap="square"><polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/><path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/></g></svg><span>CyberSlayerCorpz</span></a>
-      <div class="desktop-nav flex items-center gap-7 font-mono text-[11px] uppercase tracking-wide text-zinc-400"><a href="#work" class="transition-colors hover:text-white">Work</a><a href="#services" class="transition-colors hover:text-white">Services</a><a href="#process" class="transition-colors hover:text-white">Process</a><a href="#pricing" class="transition-colors hover:text-white">Pricing</a></div>
-      <a href="#contact" class="rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-950 transition-transform hover:-translate-y-0.5">Start Project</a>
+<body class="bg-oatmeal text-ink dark:bg-[#111111] dark:text-[#F4F4F5] font-sans antialiased selection:bg-ink selection:text-oatmeal dark:selection:bg-white dark:selection:text-black min-h-screen transition-colors duration-200">
+
+  <!-- Glassmorphic Sticky Header -->
+  <header class="sticky top-4 z-50 flex justify-center px-4 mb-6">
+    <nav class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-sm rounded-full px-5 py-2.5 flex items-center gap-5 sm:gap-8 transition duration-300">
+      
+      <a href="#" class="flex items-center gap-3">
+        <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" alt="CyberSlayerCorpz Logo" class="w-6 h-6 rounded-md" />
+        <span class="font-display font-bold text-sm tracking-tight text-ink dark:text-white">CyberSlayerCorpz</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-6 text-[13px] font-medium text-inkMuted dark:text-zinc-400 tracking-tight">
+        <a href="#workflow" class="hover:text-ink dark:hover:text-white transition">Workflow</a>
+        <a href="#capabilities" class="hover:text-ink dark:hover:text-white transition">Capabilities</a>
+        <a href="#specs" class="hover:text-ink dark:hover:text-white transition">Specs</a>
+        <a href="#deployments" class="hover:text-ink dark:hover:text-white transition">Deployments</a>
+        <a href="#timeline" class="hover:text-ink dark:hover:text-white transition">Timeline</a>
+        <a href="#pricing" class="hover:text-ink dark:hover:text-white transition">Pricing</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Dark Mode Toggle Button -->
+        <button id="themeToggle" aria-label="Toggle Theme" class="p-2 text-inkMuted dark:text-zinc-400 hover:text-ink dark:hover:text-white transition rounded-full">
+          <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <a href="#contact" class="bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold px-4 py-2 rounded-full tracking-tight transition duration-200 shadow-sm">
+          Start Project
+        </a>
+      </div>
     </nav>
   </header>
 
-  <main id="top" class="relative z-10">
-    <section class="mx-auto max-w-7xl px-5 pb-24 pt-28 sm:px-8 sm:pt-36 lg:px-12 lg:pb-36">
-      <div class="max-w-4xl"><div class="eyebrow mb-7">Active production capacity — 48-hour turnaround</div><h1 class="max-w-4xl text-5xl font-semibold leading-[.98] tracking-[-.065em] text-white sm:text-7xl lg:text-[88px]">Fast-Turnaround Digital Engineering for Growing Businesses.</h1><p class="mt-8 max-w-2xl text-lg leading-8 text-zinc-400 sm:text-xl">High-converting mobile lookbooks, B2B catalogs, and booking systems designed to convert organic and search traffic.</p><div class="mt-10 flex flex-col gap-3 sm:flex-row"><a href="#contact" class="inline-flex items-center justify-center gap-3 rounded-md bg-white px-5 py-3.5 text-sm font-semibold text-zinc-950 transition-transform hover:-translate-y-0.5">Reserve 48h Slot <span class="arrow">→</span></a><a href="#work" class="inline-flex items-center justify-center gap-3 rounded-md border border-zinc-700 px-5 py-3.5 text-sm font-medium text-white transition-colors hover:border-zinc-500">View Work <span class="arrow">↗</span></a></div></div>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
+
+    <!-- Centered Hero Section -->
+    <section class="max-w-4xl mx-auto text-center flex flex-col items-center mb-32 space-y-7">
+      
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surfaceCard dark:bg-zinc-900 border border-hairline dark:border-zinc-800 text-xs font-semibold text-inkMuted dark:text-zinc-400">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Production Capacity Active — 48-Hour Turnaround
+      </div>
+
+      <h1 class="font-display font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-[5.2rem] tracking-tight leading-[0.94] text-ink dark:text-white text-center">
+        CyberSlayerCorpz
+      </h1>
+
+      <p class="text-base sm:text-xl text-inkMuted dark:text-zinc-400 max-w-2xl leading-relaxed text-center">
+        We build high-performance mobile websites, digital lookbooks, and direct ordering systems for businesses ready to turn search traffic into revenue.
+      </p>
+
+      <div class="w-full border-t border-hairline dark:border-zinc-800 pt-7 flex flex-wrap justify-center items-center gap-4">
+        <a href="#contact" class="bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold px-7 py-3.5 rounded-full tracking-tight transition duration-200">
+          Initiate Build
+        </a>
+        <a href="#deployments" class="text-xs font-semibold text-ink dark:text-zinc-200 hover:text-inkMuted dark:hover:text-white tracking-tight px-5 py-3.5 border border-hairline dark:border-zinc-800 rounded-full bg-surfaceCard/40 dark:bg-zinc-900/40">
+          View Live Demos ↓
+        </a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfMF3Inm3AfIOPMHFS1sq2yTuSkACQ6QweBD9RDcf93SqHGeg/viewform?usp=header" target="_blank" class="text-xs font-semibold text-ink dark:text-zinc-200 hover:text-inkMuted dark:hover:text-white tracking-tight px-5 py-3.5 border border-hairline dark:border-zinc-800 rounded-full bg-surfaceCard/40 dark:bg-zinc-900/40 inline-flex items-center gap-1.5">
+          <span>Client Onboarding Form</span>
+          <span>↗</span>
+        </a>
+      </div>
+
     </section>
 
-    <section id="work" class="border-t border-zinc-900 py-24 sm:py-32"><div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12"><div class="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><div class="eyebrow mb-4">Selected client deployments</div><h2 class="text-3xl font-semibold tracking-[-.04em] sm:text-5xl">Built for the next customer.</h2></div><p class="max-w-sm text-sm leading-6 text-zinc-500">Focused digital systems for businesses that need to be found, understood, and contacted.</p></div><div class="grid gap-4 lg:grid-cols-3">
-      <a class="work-card glass group rounded-xl p-3" href="https://demo.cyberslayercorpz.dev/princy-boutique" target="_blank" rel="noreferrer"><div class="flex aspect-[1.35/1] flex-col justify-between rounded-lg bg-gradient-to-br from-[#3c2b2f] via-[#1d171b] to-[#121215] p-5"><span class="eyebrow text-zinc-300">01 / lookbook</span><span class="font-serif text-3xl text-white">Princy<br/>Boutique</span></div><div class="p-3 pb-2"><div class="flex items-start justify-between gap-3"><div><h3 class="font-medium">Princy Boutique</h3><p class="mt-2 text-sm leading-6 text-zinc-500">Bridal Studio Lookbook with direct enquiry pathways.</p></div><span class="arrow text-lg text-zinc-400">↗</span></div><div class="mt-5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">Fashion · WhatsApp</div></div></a>
-      <a class="work-card glass group rounded-xl p-3" href="https://demo.cyberslayercorpz.dev/jailani-catering" target="_blank" rel="noreferrer"><div class="flex aspect-[1.35/1] flex-col justify-between rounded-lg bg-gradient-to-br from-[#4a301d] via-[#211911] to-[#121215] p-5"><span class="eyebrow text-zinc-300">02 / hospitality</span><span class="font-serif text-3xl text-white">Jailani<br/>Biryani Feast</span></div><div class="p-3 pb-2"><div class="flex items-start justify-between gap-3"><div><h3 class="font-medium">Jailani Biryani Feast</h3><p class="mt-2 text-sm leading-6 text-zinc-500">Catering, menu, and custom order experience.</p></div><span class="arrow text-lg text-zinc-400">↗</span></div><div class="mt-5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">Catering · Menu</div></div></a>
-      <a class="work-card glass group rounded-xl p-3" href="https://demo.cyberslayercorpz.dev/sri-ganesh-cartons" target="_blank" rel="noreferrer"><div class="flex aspect-[1.35/1] flex-col justify-between rounded-lg bg-gradient-to-br from-[#253239] via-[#151f22] to-[#121215] p-5"><span class="eyebrow text-zinc-300">03 / industrial</span><span class="font-serif text-3xl text-white">Sri Ganesh<br/>Packaging</span></div><div class="p-3 pb-2"><div class="flex items-start justify-between gap-3"><div><h3 class="font-medium">Sri Ganesh Packaging</h3><p class="mt-2 text-sm leading-6 text-zinc-500">Product catalog and RFQ flow for procurement teams.</p></div><span class="arrow text-lg text-zinc-400">↗</span></div><div class="mt-5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">B2B · Catalog</div></div></a>
-    </div></div></section>
+    <!-- Workflow Section with scroll-mt-28 -->
+    <section id="workflow" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Workflow Engine
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            A linear build system that transforms your existing photos, price lists, and catalogs into an operational web property in 48 hours.
+          </p>
+        </div>
+      </div>
 
-    <section id="services" class="border-t border-zinc-900 py-24 sm:py-32"><div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12"><div class="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><div class="eyebrow mb-4">What we do</div><h2 class="max-w-xl text-3xl font-semibold tracking-[-.04em] sm:text-5xl">Technology built around your business.</h2></div><p class="max-w-sm text-sm leading-6 text-zinc-500">Every build is compact, intentional, and made to create a measurable next step.</p></div><div class="grid gap-px overflow-hidden rounded-xl border border-zinc-800 bg-zinc-800 sm:grid-cols-2"><article class="service-card bg-panel p-7 sm:p-9"><span class="eyebrow">01</span><h3 class="mt-16 text-xl font-medium">Digital Lookbooks &amp; Catalogs</h3><p class="mt-3 text-sm leading-6 text-zinc-500">Make your products easy to browse, trust, and share on every screen.</p></article><article class="service-card bg-panel p-7 sm:p-9"><span class="eyebrow">02</span><h3 class="mt-16 text-xl font-medium">Direct Inquiry &amp; WhatsApp Funnels</h3><p class="mt-3 text-sm leading-6 text-zinc-500">Turn high-intent visits into conversations with clear, low-friction contact flows.</p></article><article class="service-card bg-panel p-7 sm:p-9"><span class="eyebrow">03</span><h3 class="mt-16 text-xl font-medium">Local SEO &amp; Google Search Schema</h3><p class="mt-3 text-sm leading-6 text-zinc-500">Give search engines the context they need to surface your business locally.</p></article><article class="service-card bg-panel p-7 sm:p-9"><span class="eyebrow">04</span><h3 class="mt-16 text-xl font-medium">Global Edge CDN &amp; Managed TLS Hosting</h3><p class="mt-3 text-sm leading-6 text-zinc-500">Fast, secure infrastructure included from staging through production.</p></article></div></div></section>
+      <div class="w-full bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 p-6 sm:p-8 mb-8 overflow-hidden">
+        <svg class="w-full h-20 sm:h-32" viewBox="0 0 1000 160" fill="none" preserveAspectRatio="none">
+          <g fill="currentColor" class="text-ink dark:text-white">
+            <rect x="10" y="60" width="6" height="40" rx="3" opacity="0.25"/>
+            <rect x="26" y="45" width="6" height="70" rx="3" opacity="0.35"/>
+            <rect x="42" y="30" width="6" height="100" rx="3" opacity="0.5"/>
+            <rect x="58" y="15" width="6" height="130" rx="3" opacity="0.75"/>
+            <rect x="74" y="10" width="6" height="140" rx="3" opacity="0.9"/>
+            <rect x="90" y="25" width="6" height="110" rx="3" opacity="0.8"/>
+            <rect x="106" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="122" y="70" width="6" height="20" rx="3" opacity="0.3"/>
+            <rect x="138" y="40" width="6" height="80" rx="3" opacity="0.6"/>
+            <rect x="154" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="170" y="10" width="6" height="140" rx="3" opacity="1.0"/>
+            <rect x="186" y="25" width="6" height="110" rx="3" opacity="0.85"/>
+            <rect x="202" y="55" width="6" height="50" rx="3" opacity="0.4"/>
+            <rect x="218" y="40" width="6" height="80" rx="3" opacity="0.65"/>
+            <rect x="234" y="15" width="6" height="130" rx="3" opacity="0.9"/>
+            <rect x="250" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="266" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="282" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="298" y="35" width="6" height="90" rx="3" opacity="0.7"/>
+            <rect x="314" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="330" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="346" y="30" width="6" height="100" rx="3" opacity="0.75"/>
+            <rect x="362" y="60" width="6" height="40" rx="3" opacity="0.35"/>
+            <rect x="378" y="45" width="6" height="70" rx="3" opacity="0.6"/>
+            <rect x="394" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="410" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="426" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="442" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="458" y="35" width="6" height="90" rx="3" opacity="0.7"/>
+            <rect x="474" y="15" width="6" height="130" rx="3" opacity="0.95"/>
+            <rect x="490" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="506" y="25" width="6" height="110" rx="3" opacity="0.8"/>
+            <rect x="522" y="55" width="6" height="50" rx="3" opacity="0.4"/>
+            <rect x="538" y="40" width="6" height="80" rx="3" opacity="0.65"/>
+            <rect x="554" y="15" width="6" height="130" rx="3" opacity="0.9"/>
+            <rect x="570" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="586" y="25" width="6" height="110" rx="3" opacity="0.85"/>
+            <rect x="602" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="618" y="30" width="6" height="100" rx="3" opacity="0.75"/>
+            <rect x="634" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="650" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="666" y="25" width="6" height="110" rx="3" opacity="0.8"/>
+            <rect x="682" y="60" width="6" height="40" rx="3" opacity="0.35"/>
+            <rect x="698" y="45" width="6" height="70" rx="3" opacity="0.6"/>
+            <rect x="714" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="730" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="746" y="25" width="6" height="110" rx="3" opacity="0.85"/>
+            <rect x="762" y="55" width="6" height="50" rx="3" opacity="0.4"/>
+            <rect x="778" y="40" width="6" height="80" rx="3" opacity="0.65"/>
+            <rect x="794" y="15" width="6" height="130" rx="3" opacity="0.9"/>
+            <rect x="810" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="826" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="842" y="50" width="6" height="60" rx="3" opacity="0.45"/>
+            <rect x="858" y="35" width="6" height="90" rx="3" opacity="0.7"/>
+            <rect x="874" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="890" y="5" width="6" height="150" rx="3" opacity="1.0"/>
+            <rect x="906" y="30" width="6" height="100" rx="3" opacity="0.75"/>
+            <rect x="922" y="60" width="6" height="40" rx="3" opacity="0.35"/>
+            <rect x="938" y="40" width="6" height="80" rx="3" opacity="0.6"/>
+            <rect x="954" y="20" width="6" height="120" rx="3" opacity="0.85"/>
+            <rect x="970" y="10" width="6" height="140" rx="3" opacity="0.95"/>
+            <rect x="986" y="40" width="6" height="80" rx="3" opacity="0.5"/>
+          </g>
+        </svg>
+      </div>
 
-    <section id="process" class="border-t border-zinc-900 py-24 sm:py-32"><div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12"><div class="mb-12"><div class="eyebrow mb-4">48-hour execution pipeline</div><h2 class="text-3xl font-semibold tracking-[-.04em] sm:text-5xl">From handover to live.</h2></div><div class="grid gap-4 md:grid-cols-4"><article class="process-card rounded-xl border border-zinc-800 bg-panel p-6"><span class="font-mono text-sm text-zinc-500">01</span><div class="mt-14 font-mono text-[11px] text-zinc-400">HOUR 00–04</div><h3 class="mt-3 text-lg font-medium">Asset Handover &amp; DNS Registration</h3><p class="mt-3 text-sm leading-6 text-zinc-500">We collect your assets, goals, and domain details.</p></article><article class="process-card rounded-xl border border-zinc-800 bg-panel p-6"><span class="font-mono text-sm text-zinc-500">02</span><div class="mt-14 font-mono text-[11px] text-zinc-400">HOUR 04–24</div><h3 class="mt-3 text-lg font-medium">Core Build &amp; Staging Environment</h3><p class="mt-3 text-sm leading-6 text-zinc-500">The first working version takes shape on a private link.</p></article><article class="process-card rounded-xl border border-zinc-800 bg-panel p-6"><span class="font-mono text-sm text-zinc-500">03</span><div class="mt-14 font-mono text-[11px] text-zinc-400">HOUR 24–36</div><h3 class="mt-3 text-lg font-medium">Mobile Prototype Client Review</h3><p class="mt-3 text-sm leading-6 text-zinc-500">You review the mobile experience and share final notes.</p></article><article class="process-card rounded-xl border border-zinc-800 bg-panel p-6"><span class="font-mono text-sm text-zinc-500">04</span><div class="mt-14 font-mono text-[11px] text-zinc-400">HOUR 36–48</div><h3 class="mt-3 text-lg font-medium">Production Domain &amp; SSL Cutover</h3><p class="mt-3 text-sm leading-6 text-zinc-500">We connect your domain and launch the finished site.</p></article></div></div></section>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-surfaceCard/70 dark:bg-zinc-900/70 p-6 rounded-xl border border-hairline dark:border-zinc-800">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Stage 1</div>
+          <h3 class="font-display font-bold text-xl text-ink dark:text-white mb-2">Intake & Ingestion</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Provide your raw product photographs, service menus, and rates. No technical documentation needed.
+          </p>
+        </div>
 
-    <section id="pricing" class="border-t border-zinc-900 py-24 sm:py-32"><div class="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_480px] lg:items-center lg:px-12"><div><div class="eyebrow mb-4">Transparent pricing</div><h2 class="max-w-lg text-3xl font-semibold tracking-[-.04em] sm:text-5xl">One flat rate. No surprises.</h2><p class="mt-6 max-w-md text-sm leading-7 text-zinc-500">A complete digital foundation for businesses ready to look as good online as they do in person.</p></div><div class="rounded-xl border border-zinc-700 bg-panel p-7 sm:p-9"><div class="eyebrow">Flat-rate project</div><div class="mt-5 text-5xl font-semibold tracking-[-.06em]">₹7,000 <span class="text-sm font-normal tracking-normal text-zinc-500">flat setup</span></div><p class="mt-3 text-sm text-zinc-400">₹3,500 advance to begin.</p><ul class="mt-8 space-y-4 border-t border-zinc-800 pt-7 text-sm text-zinc-300"><li>✓ Custom mobile layout</li><li>✓ 1-year .in or .com domain</li><li>✓ 1-year hosting + SSL</li><li>✓ Inquiry routing and WhatsApp button</li><li>✓ 48-hour delivery guarantee</li></ul><a href="#contact" class="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-md bg-white px-5 py-3.5 text-sm font-semibold text-zinc-950">Reserve your slot <span class="arrow">→</span></a></div></div></section>
+        <div class="bg-surfaceCard/70 dark:bg-zinc-900/70 p-6 rounded-xl border border-hairline dark:border-zinc-800">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Stage 2</div>
+          <h3 class="font-display font-bold text-xl text-ink dark:text-white mb-2">Staging Verification</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Within 24 hours, test your live staging environment directly on your mobile device to verify layouts and order triggers.
+          </p>
+        </div>
 
-    <section id="contact" class="border-t border-zinc-900 py-24 sm:py-32"><div class="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-[.8fr_1.2fr] lg:gap-24 lg:px-12"><div><div class="eyebrow mb-4">Start a conversation</div><h2 class="text-3xl font-semibold tracking-[-.04em] sm:text-5xl">Tell us what you&apos;re building.</h2><p class="mt-6 max-w-sm text-sm leading-7 text-zinc-500">Share the essentials. We&apos;ll reply with the next step and confirm whether your 48-hour slot is a fit.</p></div><form class="space-y-5" action="https://api.web3forms.com/submit" method="POST"><input type="hidden" name="access_key" value="865e56af-935b-4a9e-a6e5-ae7bad6ce9c1" /><input type="hidden" name="subject" value="New CyberSlayerCorpz project inquiry" /><input type="hidden" name="from_name" value="CyberSlayerCorpz website" /><div class="grid gap-5 sm:grid-cols-2"><label class="space-y-2 text-sm text-zinc-400">Name<input required name="name" class="mt-2 w-full rounded-md border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-zinc-500" placeholder="Your name" /></label><label class="space-y-2 text-sm text-zinc-400">WhatsApp / Phone<input required name="phone" type="tel" class="mt-2 w-full rounded-md border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-zinc-500" placeholder="+91 00000 00000" /></label></div><label class="block space-y-2 text-sm text-zinc-400">Business Name<input required name="business" class="mt-2 w-full rounded-md border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-zinc-500" placeholder="Your business" /></label><label class="block space-y-2 text-sm text-zinc-400">Project Details<textarea required name="message" rows="5" class="mt-2 w-full resize-y rounded-md border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-zinc-500" placeholder="What would you like to build?"></textarea></label><button type="submit" class="inline-flex items-center gap-3 rounded-md bg-white px-5 py-3.5 text-sm font-semibold text-zinc-950">Send inquiry <span class="arrow">→</span></button></form></div></section>
+        <div class="bg-surfaceCard/70 dark:bg-zinc-900/70 p-6 rounded-xl border border-hairline dark:border-zinc-800">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Stage 3</div>
+          <h3 class="font-display font-bold text-xl text-ink dark:text-white mb-2">Domain & SSL Deployment</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            We configure your official domain, establish encryption keys, and transfer complete operational ownership in 48 hours.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities Section with scroll-mt-28 -->
+    <section id="capabilities" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Core Capabilities
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Focused engineering features built to drive customer conversions through structured cataloging and automated communication.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            1
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Digital Lookbooks</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Showcase design variations, garment codes, or parts catalogs with clear specifications.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            2
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Direct Inquiries</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Pre-filled inquiry actions that identify specific designs and item codes instantly.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            3
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Search Indexing</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Clean metadata, location tagging, and performance optimizations for map and search queries.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-xl border border-hairline dark:border-zinc-800 flex flex-col justify-between h-64">
+          <div class="w-8 h-8 rounded-lg bg-ink text-oatmeal dark:bg-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
+            4
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-ink dark:text-white">Static Edge Host</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 mt-1 leading-relaxed">
+              Global CDN delivery with reliable uptime, zero database latency, and automated SSL renewals.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specs Section with scroll-mt-28 -->
+    <section id="specs" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            What's In The Box
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Every technical component configured, provisioned, and verified before client handoff.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 01</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Custom Domain Mapping</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Full DNS provisioning for `.in` or `.com` extensions with Apex to WWW redirects and root records.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 02</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Automated WebP Compression</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Every product photo is converted to WebP with responsive breakpoints for sub-second mobile downloads.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 03</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">TLS 1.3 Encryption Keys</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Hardware-backed SSL certificate installation with automated ninety-day renewal cron jobs.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 04</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Viewport Calibration</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Zero horizontal overflow with touch-target heights sized for one-handed thumb interaction.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 05</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Local Schema Indexing</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            JSON-LD structured business tags embedded to link Google Business Profiles, hours, and addresses.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-2">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">SPEC // 06</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">SKU Ingestion Routing</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Dynamic action hooks that append item codes, sizes, and collection names straight to inquiries.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deployments Section with scroll-mt-28 -->
+    <section id="deployments" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-10">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Selected Deployments
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Review active prototypes engineered for retail fashion, hospitality catering, and commercial packaging.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <article class="bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 overflow-hidden flex flex-col justify-between p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs font-semibold text-inkMuted dark:text-zinc-500 border-b border-hairline/60 dark:border-zinc-800 pb-3">
+              <span>Bridal Studio</span>
+              <span>Lookbook</span>
+            </div>
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Princy Boutique</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Bridal lookbook with embroidery design codes, turnaround lead times, and trial booking.
+            </p>
+          </div>
+
+          <div class="pt-8">
+            <a href="https://demo.cyberslayercorpz.dev/princy-boutique" target="_blank" class="w-full inline-flex justify-between items-center bg-oatmeal dark:bg-zinc-800 border border-hairline dark:border-zinc-700 hover:bg-ink hover:text-oatmeal dark:hover:bg-white dark:hover:text-zinc-950 text-ink dark:text-white text-xs font-semibold px-4 py-3 rounded-lg transition duration-200">
+              <span>View Prototype</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 overflow-hidden flex flex-col justify-between p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs font-semibold text-inkMuted dark:text-zinc-500 border-b border-hairline/60 dark:border-zinc-800 pb-3">
+              <span>Catering</span>
+              <span>Menu Portal</span>
+            </div>
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Jailani Biryani Feast</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Event catering portal with live guest tier calculators and custom order generation.
+            </p>
+          </div>
+
+          <div class="pt-8">
+            <a href="https://demo.cyberslayercorpz.dev/jailani-catering" target="_blank" class="w-full inline-flex justify-between items-center bg-oatmeal dark:bg-zinc-800 border border-hairline dark:border-zinc-700 hover:bg-ink hover:text-oatmeal dark:hover:bg-white dark:hover:text-zinc-950 text-ink dark:text-white text-xs font-semibold px-4 py-3 rounded-lg transition duration-200">
+              <span>View Prototype</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="bg-surfaceCard dark:bg-zinc-900 rounded-2xl border border-hairline dark:border-zinc-800 overflow-hidden flex flex-col justify-between p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs font-semibold text-inkMuted dark:text-zinc-500 border-b border-hairline/60 dark:border-zinc-800 pb-3">
+              <span>Manufacturing</span>
+              <span>Catalog & RFQ</span>
+            </div>
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Sri Ganesh Packaging</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Industrial corrugated packaging catalog detailing ply construction, burst tests, and RFQ forms.
+            </p>
+          </div>
+
+          <div class="pt-8">
+            <a href="https://demo.cyberslayercorpz.dev/sri-ganesh-cartons" target="_blank" class="w-full inline-flex justify-between items-center bg-oatmeal dark:bg-zinc-800 border border-hairline dark:border-zinc-700 hover:bg-ink hover:text-oatmeal dark:hover:bg-white dark:hover:text-zinc-950 text-ink dark:text-white text-xs font-semibold px-4 py-3 rounded-lg transition duration-200">
+              <span>View Prototype</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Timeline Section with scroll-mt-28 -->
+    <section id="timeline" class="scroll-mt-28 mb-32 pt-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            48-Hour Roadmap
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            A look at how a project moves from asset handover to an active production URL.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 00 – 04</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Asset Handover</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Assets received, 50% advance confirmed, and domain records registered with target registrars.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 04 – 24</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Core Assembly</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Layout construction, WebP conversion, mobile viewport testing, and staging build deployment.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 24 – 36</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">Staging Review</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Review live prototype link on mobile, test inquiry routing buttons, and apply adjustments.
+          </p>
+        </div>
+
+        <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 space-y-3">
+          <span class="text-xs font-mono font-bold text-ink dark:text-white">HOUR 36 – 48</span>
+          <h3 class="font-display font-bold text-lg text-ink dark:text-white">DNS Go-Live</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+            SSL keys bound to official domain, remaining balance settled, and ownership keys handed over.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section with scroll-mt-28 -->
+    <section id="pricing" class="scroll-mt-28 mb-32 pt-4">
+      <div class="bg-ink dark:bg-zinc-900 text-oatmeal dark:text-white rounded-3xl p-8 sm:p-14 border border-ink dark:border-zinc-800 shadow-xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-7 space-y-4">
+            <div class="text-xs font-semibold text-hairline dark:text-zinc-400 tracking-wider uppercase">
+              Flat Pricing
+            </div>
+            <h2 class="font-display font-extrabold text-4xl sm:text-6xl tracking-tight text-white leading-tight">
+              ₹7,000 Setup.
+            </h2>
+            <p class="text-xs sm:text-sm text-hairline/80 dark:text-zinc-400 max-w-lg leading-relaxed">
+              Everything included to get your business website live. No hidden agency retainers or monthly host fees.
+            </p>
+
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 text-xs text-hairline/90 dark:text-zinc-300">
+              <li class="flex items-center gap-2"><span>•</span> Custom 1-Page Mobile Website</li>
+              <li class="flex items-center gap-2"><span>•</span> 1 Year .in or .com Domain</li>
+              <li class="flex items-center gap-2"><span>•</span> 1 Year Cloud Hosting & SSL</li>
+              <li class="flex items-center gap-2"><span>•</span> Direct Inquiry Buttons</li>
+              <li class="flex items-center gap-2"><span>•</span> 48-Hour Turnaround</li>
+              <li class="flex items-center gap-2"><span>•</span> 50% Advance (₹3,500) to Begin</li>
+            </ul>
+          </div>
+
+          <div class="lg:col-span-5 bg-[#1F1E1C] dark:bg-black p-8 rounded-2xl border border-white/10 dark:border-zinc-800 text-center space-y-4">
+            <div class="text-xs text-hairline dark:text-zinc-400 uppercase tracking-wider font-semibold">Ready to Launch</div>
+            <div class="font-display font-bold text-3xl text-white">48-Hour Delivery</div>
+            <p class="text-xs text-hairline/70 dark:text-zinc-400">
+              Reserve your build slot with a ₹3,500 advance. Remaining balance is due only upon staging review approval.
+            </p>
+            <a href="#contact" class="block w-full bg-oatmeal text-ink dark:bg-white dark:text-zinc-950 hover:bg-white text-xs font-semibold py-3.5 rounded-full tracking-tight transition duration-200">
+              Book Project
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-32 pt-8">
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Frequently Asked Questions
+          </h2>
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400">Clear answers on how we deploy, maintain, and transfer your site.</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800">
+            <h4 class="font-display font-bold text-base text-ink dark:text-white mb-1">What happens after the first year of hosting and domain?</h4>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Domain registration and static hosting renew at exact cost (typically ~₹1,200/year for `.in` or `.com` plus DNS). We never charge mandatory agency retainers.
+            </p>
+          </div>
+
+          <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800">
+            <h4 class="font-display font-bold text-base text-ink dark:text-white mb-1">Do I need to write text or provide finished designs?</h4>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              No. Send us your product photos, catalog sheets, address, and a brief description of your services. We format the typography, write the copy, and assemble the page structure for you.
+            </p>
+          </div>
+
+          <div class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800">
+            <h4 class="font-display font-bold text-base text-ink dark:text-white mb-1">What is the payment milestone breakdown?</h4>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              We charge a 50% advance (₹3,500) to secure your staging deployment slot and register your domain. The final 50% balance is payable only after you verify the working prototype on your phone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Channels with scroll-mt-28 -->
+    <section id="contact" class="scroll-mt-28 pt-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-8">
+        <div class="lg:col-span-7">
+          <div class="text-xs font-semibold text-inkMuted dark:text-zinc-500 mb-2">Direct Contact</div>
+          <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight text-ink dark:text-white">
+            Get in Touch
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-xs sm:text-sm text-inkMuted dark:text-zinc-400 leading-relaxed">
+            Direct communication channels for new project requests and asset submissions.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <a href="https://instagram.com/cyberslayercorpz" target="_blank" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 1</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Instagram</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Send your profile link, current photos, or project inquiries directly to our inbox.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>@cyberslayercorpz</span>
+            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+          </div>
+        </a>
+
+        <a href="mailto:contact@cyberslayercorpz.dev" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 2</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Project Desk</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Forward catalogs, menus, or specifications directly to our studio address.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>contact@cyberslayercorpz.dev</span>
+            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+          </div>
+        </a>
+
+        <a href="#quick-inquiry" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 3</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Web Inquiry</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Submit your project scope and phone number via our instant submission portal.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>Online Form</span>
+            <span class="group-hover:translate-y-1 transition-transform">↓</span>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfMF3Inm3AfIOPMHFS1sq2yTuSkACQ6QweBD9RDcf93SqHGeg/viewform?usp=header" target="_blank" class="bg-surfaceCard dark:bg-zinc-900 p-6 rounded-2xl border border-hairline dark:border-zinc-800 hover:border-ink dark:hover:border-zinc-600 transition duration-200 flex flex-col justify-between group">
+          <div class="space-y-3">
+            <span class="text-xs font-semibold text-inkMuted dark:text-zinc-500">Channel 4</span>
+            <h3 class="font-display font-bold text-xl text-ink dark:text-white group-hover:underline">Client Intake</h3>
+            <p class="text-xs text-inkMuted dark:text-zinc-400 leading-relaxed">
+              Complete the structured onboarding form to provide your domain, address, and files.
+            </p>
+          </div>
+          <div class="pt-6 text-xs font-semibold text-ink dark:text-white flex items-center justify-between">
+            <span>Google Forms</span>
+            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Web3Forms Form with scroll-mt-28 and production access key -->
+      <div id="quick-inquiry" class="scroll-mt-28 max-w-2xl mx-auto bg-surfaceCard dark:bg-zinc-900 p-8 rounded-3xl border border-hairline dark:border-zinc-800">
+        <div class="mb-6 space-y-1">
+          <h3 class="font-display font-bold text-2xl text-ink dark:text-white">Quick Project Inquiry</h3>
+          <p class="text-xs text-inkMuted dark:text-zinc-400">Send your project details straight to our desk via Web3Forms.</p>
+        </div>
+
+        <form action="https://api.web3forms.com/submit" method="POST" class="space-y-4">
+          <input type="hidden" name="access_key" value="865e56af-935b-4a9e-a6e5-ae7bad6ce9c1" />
+          <input type="hidden" name="subject" value="New Web Inquiry - CyberSlayerCorpz" />
+          <input type="hidden" name="redirect" value="https://cyberslayercorpz.dev/thank-you.html" />
+          <div>
+            <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Your Name</label>
+            <input type="text" name="name" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="e.g. Ramesh Kumar" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Email or Phone</label>
+              <input type="text" name="contact" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="+91 or email@domain.com" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Business Name</label>
+              <input type="text" name="business" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="e.g. Princy Aari Studio" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-ink dark:text-zinc-300 mb-1">Project Details</label>
+            <textarea name="message" rows="3" required class="w-full bg-white dark:bg-zinc-800 border border-hairline dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-ink dark:text-white focus:outline-none focus:border-ink dark:focus:border-white transition" placeholder="Tell us about your products, requirements, or target launch date..."></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-ink hover:bg-black text-oatmeal dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 text-xs font-semibold py-3.5 rounded-xl tracking-tight transition duration-200 shadow-sm">
+            Send Inquiry
+          </button>
+        </form>
+      </div>
+    </section>
+
   </main>
-  <footer class="relative z-10 border-t border-zinc-900 px-5 py-7 sm:px-8 lg:px-12"><div class="mx-auto flex max-w-7xl flex-col gap-4 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between"><a href="#top" class="flex items-center gap-2.5 font-medium text-zinc-300"><svg class="h-6 w-6 rounded" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" aria-hidden="true"><rect width="500" height="500" rx="100" fill="#18181B"/><g stroke-width="16" stroke-linecap="square"><polygon points="250,110 360,180 360,320 250,390 140,320 140,180" stroke="#FFFFFF"/><path d="M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250" stroke="#A1A1AA" stroke-width="10"/></g></svg><span>CyberSlayerCorpz</span></a><span>© 2026 CYBERSLAYERCORPZ</span></div></footer>
+
+  <!-- Editorial Minimalist Footer -->
+  <footer class="border-t border-hairline dark:border-zinc-800 py-10 bg-oatmealDark/40 dark:bg-zinc-950/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-xs text-inkMuted dark:text-zinc-500 gap-4">
+      <div class="flex items-center gap-3">
+        <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 500%22><rect width=%22500%22 height=%22500%22 rx=%22100%22 fill=%22%2318181B%22/><g stroke-width=%2216%22 stroke-linecap=%22square%22><polygon points=%22250,110 360,180 360,320 250,390 140,320 140,180%22 stroke=%22%23FFFFFF%22/><path d=%22M 250 110 V 250 M 360 180 L 250 250 M 140 180 L 250 250%22 stroke=%22%23A1A1AA%22 stroke-width=%2210%22/></g></svg>" alt="CyberSlayerCorpz Logo" class="w-5 h-5 rounded-sm" />
+        <span class="font-display font-bold text-ink dark:text-white text-sm">CyberSlayerCorpz</span>
+      </div>
+
+      <div class="text-xs">
+        Fast-Turnaround Digital Engineering
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    themeToggleBtn.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  </script>
+
 </body>
 </html>
