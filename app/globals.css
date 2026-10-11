@@ -67,7 +67,7 @@ button, input, textarea { font: inherit; }
 .contact-form input:focus, .contact-form textarea:focus { box-shadow: 0 2px 0 #ff8739; }
 @keyframes scroll-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes announcement-pulse { 0%, 100% { opacity: .65; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.15); } }
-@keyframes header-drop { from { opacity: 0; transform: translateY(-18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes header-drop { from { opacity: 0; transform: translate(-50%, -18px) scale(.97); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
 @keyframes ambient-drift { from { transform: translate3d(0, -20px, 0) scale(.85); } to { transform: translate3d(-80px, 80px, 0) scale(1.2); } }
 @keyframes card-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
 @keyframes faq-reveal { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
