@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { DM_Sans, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google"
+import { Geist_Mono, Inter, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 
-const display = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-display", weight: ["400", "500", "600", "700"] })
-const body = DM_Sans({ subsets: ["latin"], variable: "--font-body", weight: ["400", "500", "600", "700"] })
+const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", weight: ["400", "500", "600", "700"] })
+const body = Inter({ subsets: ["latin"], variable: "--font-body", weight: ["400", "500", "600", "700"] })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
