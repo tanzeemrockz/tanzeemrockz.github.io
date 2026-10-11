@@ -633,14 +633,29 @@ const TechText = ({
     };
     wakeRef.current = wake;
 
+    let resizeFrame = 0;
+    let measuredWidth = 0;
+    let measuredHeight = 0;
+    let measuredDpr = 0;
     const resize = () => {
-      width = Math.max(1, container.clientWidth);
-      height = Math.max(1, container.clientHeight);
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      layoutKey = '';
-      wake();
+      if (resizeFrame) return;
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = 0;
+        const nextWidth = Math.max(1, container.clientWidth);
+        const nextHeight = Math.max(1, container.clientHeight);
+        const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (nextWidth === measuredWidth && nextHeight === measuredHeight && nextDpr === measuredDpr) return;
+        measuredWidth = nextWidth;
+        measuredHeight = nextHeight;
+        measuredDpr = nextDpr;
+        width = nextWidth;
+        height = nextHeight;
+        dpr = nextDpr;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        layoutKey = '';
+        wake();
+      });
     };
 
     const locate = (e: PointerEvent) => {
@@ -705,6 +720,7 @@ const TechText = ({
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(resizeFrame);
       wakeRef.current = () => {};
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
