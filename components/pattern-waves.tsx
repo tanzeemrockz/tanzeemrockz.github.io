@@ -47,6 +47,38 @@ export default function PatternWaves({
   shine = 0.8,
 }: PatternWavesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const settingsRef = useRef({
+    backgroundColor,
+    color,
+    cursorSize,
+    cursorStrength,
+    depth,
+    direction,
+    fadeSize,
+    interactive,
+    intro,
+    opacity,
+    paused,
+    shine,
+    spacing,
+    speed,
+  })
+  settingsRef.current = {
+    backgroundColor,
+    color,
+    cursorSize,
+    cursorStrength,
+    depth,
+    direction,
+    fadeSize,
+    interactive,
+    intro,
+    opacity,
+    paused,
+    shine,
+    spacing,
+    speed,
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -79,6 +111,23 @@ export default function PatternWaves({
     const leave = () => { pointer.x = -1000; pointer.y = -1000 }
 
     const draw = (now: number) => {
+      const {
+        backgroundColor,
+        color,
+        cursorSize,
+        cursorStrength,
+        depth,
+        direction,
+        fadeSize,
+        interactive,
+        intro,
+        opacity,
+        paused,
+        shine,
+        spacing,
+        speed,
+      } = settingsRef.current
+
       if (!paused) {
         const elapsed = (now - start) * 0.001 * speed
         context.fillStyle = backgroundColor
@@ -160,7 +209,7 @@ export default function PatternWaves({
       canvas.removeEventListener('pointerleave', leave)
       frame = 0
     }
-  }, [backgroundColor, color, cursorSize, cursorStrength, depth, direction, fadeSize, interactive, intro, opacity, paused, shine, spacing, speed])
+  }, [])
 
   return <canvas ref={canvasRef} className={`pattern-waves-canvas ${className}`} aria-hidden="true" />
 }
